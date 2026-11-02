@@ -13,7 +13,7 @@
 }
 
 .xterm-viewport::-webkit-scrollbar-thumb {
-	background-color: rgba(255, 255, 255, 0.25);
+	background-color: var(--line-active);
 	border-radius: 10px;
 	outline: none;
 }
@@ -28,7 +28,7 @@
 	}
 	
 	.contents::-webkit-scrollbar-thumb {
-		background-color: rgba(255, 255, 255, 0.4);
+		background-color: var(--line-active);
 		border-radius: 10px;
 		outline: none;
 	}
@@ -43,7 +43,7 @@
 }
 
 .scrollbars::-webkit-scrollbar-thumb {
-	background-color: rgba(255, 255, 255, 0.4);
+	background-color: var(--line-active);
 	border-radius: 10px;
 	outline: none;
 }
@@ -109,7 +109,7 @@
 
 .CodeMirror-vscrollbar::-webkit-scrollbar-thumb,
 .CodeMirror-hscrollbar::-webkit-scrollbar-thumb {
-	background-color: rgba(255, 255, 255, 0.4);
+	background-color: var(--line-active);
 	border-radius: 10px;
 	outline: none;
 }

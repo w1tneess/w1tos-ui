@@ -214,7 +214,7 @@ export default {
 
 .ps__thumb-x,
 .ps__thumb-y {
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: var(--raised);
     width: 8px;
     right: 5px;
 }

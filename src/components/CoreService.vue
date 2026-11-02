@@ -617,7 +617,7 @@ export default {
 		margin-right: 0.5rem;
 		width: 2rem;
 		height: 0.25rem;
-		background: rgba(255, 255, 255, 0.4);
+		background: var(--raised);
 		border-radius: 0.125rem;
 		display: inline-block;
 		position: relative;
@@ -628,7 +628,7 @@ export default {
 			height: 2rem;
 			position: absolute;
 			content: '';
-			background: rgba(255, 255, 255, 0);
+			background: transparent;
 			border-radius: 0.125rem;
 			top: -0.875rem;
 			left: 0;
@@ -636,7 +636,7 @@ export default {
 	}
 
 	::v-deep .swiper-pagination-bullet-active {
-		background: #FFFFFF;
+		background: var(--raised);
 	}
 }
 </style>

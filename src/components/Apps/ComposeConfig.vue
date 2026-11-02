@@ -996,7 +996,7 @@ export default {
   border-radius: 50%;
   -webkit-box-shadow: 0 0 0 2px #ccc;
   box-shadow: 0 0 0 2px #ccc;
-  background-color: #fff;
+  background-color: var(--surface);
 }
 
 ::v-deep .vue-slider-mark-label {

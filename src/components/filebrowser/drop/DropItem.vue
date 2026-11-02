@@ -426,7 +426,7 @@ export default {
 			z-index: 2;
 			left: 0;
 			top: 0;
-			background-color: #ffffff;
+			background-color: var(--surface);
 			border-radius: 50%;
 			box-shadow: 0px 32px 64px -16px rgba(28, 31, 34, 0.2);
 			display: flex;
@@ -436,7 +436,7 @@ export default {
 			border: 2px solid #ffffff;
 
 			&.is-online {
-				background-color: #ffffff !important;
+				background-color: var(--surface) !important;
 			}
 
 			.b-image-wrapper {
@@ -446,7 +446,7 @@ export default {
 					width: 8px;
 					height: 8px;
 					border-radius: 50%;
-					background-color: rgba(255, 255, 255, 0);
+					background-color: transparent;
 					z-index: 1;
 					right: -3px;
 					top: -3px;

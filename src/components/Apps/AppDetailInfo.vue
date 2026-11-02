@@ -333,7 +333,7 @@ export default {
 
         &::before,
         &::after {
-            background: #fff;
+            background: var(--surface);
         }
     }
 }

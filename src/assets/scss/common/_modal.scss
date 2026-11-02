@@ -6,7 +6,7 @@
 
 
 .modal-card {
-    background: rgba(255, 255, 255, 1);
+    background: var(--raised);
     border-radius: $backDropBorderRadius;
 
     .close-container {
@@ -175,7 +175,7 @@
 
                     &.is-active {
                         a {
-                            background: #FFFFFF;
+                            background: var(--raised);
                             border: .5px solid rgba(0, 0, 0, .2);
                             color: #000000;
                             z-index: 1;
@@ -208,7 +208,7 @@
 
 .dialog {
     .modal-card {
-        background-color: #FFFFFF !important;
+        background-color: var(--raised) !important;
 
         .modal-card-head {
             height: 3.5rem;

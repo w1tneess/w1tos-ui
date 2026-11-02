@@ -815,7 +815,7 @@ export default {
 	position: relative;
 	z-index: 20;
 	height: 2.75rem;
-	background: rgba(255, 255, 255, 1);
+	background: var(--raised);
 
 	.navbar-brand {
 		margin-left: 1.25rem;
@@ -850,7 +850,7 @@ export default {
 			min-width: 22.5rem;
 
 			.dropdown-content {
-				background: rgba(255, 255, 255, 1);
+				background: var(--raised);
 				border-radius: 10px;
 
 				.dropdown-item {
