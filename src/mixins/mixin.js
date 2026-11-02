@@ -40,8 +40,6 @@ const filePanelMap = {
 	// "mark-down-editor":typeMap['text-markdown'],
 	"pdf-viewer": typeMap['application-pdf'],
 }
-export const wallpaperType = ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'svg']
-const wallpaperConfig = "wallpaper"
 
 
 export const mixin = {
@@ -326,51 +324,6 @@ export const mixin = {
 			}
 
 			deleteItems(paths);
-		},
-		/**
-		 * @description: Set an image as wallpaper
-		 * @param {*} item
-		 * @return {*}
-		 */
-		setAsWallpaper(item) {
-			const postData = {
-				path: item.path,
-			}
-			this.$api.users.setUserImage(wallpaperConfig, postData).then(res => {
-				if (res.data.success === 200) {
-					const resData = res.data.data
-					let wallpaperData = {
-						path: "SERVER_URL" + resData.online_path + "&time=" + new Date().getTime(),
-						from: "Files"
-					}
-					this.$api.users.setCustomStorage(wallpaperConfig, wallpaperData).then(res => {
-						if (res.data.success === 200) {
-							this.$store.commit('SET_WALLPAPER', {
-								path: res.data.data.path,
-								from: res.data.data.from
-							})
-							this.$buefy.toast.open({
-								message: this.$t('Set wallpaper successfully.'),
-								type: 'is-success'
-							})
-						} else {
-							this.$buefy.toast.open({
-								message: this.$t('Save failed, please try again!'),
-								type: 'is-danger'
-							})
-						}
-
-					})
-				} else {
-					this.$buefy.toast.open({
-						message: this.$t('Save failed, please try again!'),
-						type: 'is-danger'
-					})
-				}
-			})
-			if (this.$refs.dropDown !== undefined) {
-				this.$refs.dropDown.toggle()
-			}
 		},
 
 	},

@@ -32,11 +32,6 @@ html {
     }
 }
 
-@font-face {
-	font-family: 'BrittiSans';
-	src: url('../fonts/britti-sans-regular.woff') format('woff');
-  }
-
 @media screen and (max-width: 1024px) {
     .container {
         margin: 0 1rem;

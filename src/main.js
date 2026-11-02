@@ -16,6 +16,8 @@ import VueDOMPurifyHTML from 'vue-dompurify-html'
 
 
 // Import Styles
+import '@fontsource-variable/inter'
+import '@fontsource-variable/jetbrains-mono'
 import '@/assets/scss/app.scss'
 import VAnimateCss from 'v-animate-css';
 

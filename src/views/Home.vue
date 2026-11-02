@@ -10,7 +10,6 @@ import UpdateCompleteModal from '@/components/settings/UpdateCompleteModal.vue'
 import { mixin } from '@/mixins/mixin'
 import events from '@/events/events'
 
-const wallpaperConfig = 'wallpaper'
 
 export default {
   name: 'HomePage',
@@ -52,7 +51,6 @@ export default {
   },
   created() {
     this.getHardwareInfo()
-    this.getWallpaperConfig()
     this.getConfig()
 
     this.$store.commit('SET_ACCESS_ID', nanoid())
@@ -168,17 +166,6 @@ export default {
     openHomeContaxtMenu(e) {
       // console.log(e.target);
       this.$EventBus.$emit(events.SHOW_HOME_CONTEXT_MENU, e)
-    },
-
-    getWallpaperConfig() {
-      this.$api.users.getCustomStorage(wallpaperConfig).then((res) => {
-        if (res.data.success === 200 && res.data.data != '') {
-          this.$store.commit('SET_WALLPAPER', {
-            path: res.data.data.path,
-            from: res.data.data.from,
-          })
-        }
-      })
     },
 
     async showUpdateCompleteModal() {

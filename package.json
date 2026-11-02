@@ -3,8 +3,9 @@
   "version": "v0.4.5",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve --mode dev",
-    "build": "node message_bus.build.js && vue-cli-service build --dest ./build/sysroot/var/lib/casaos/www/ --mode production",
+    "brand": "node scripts/brand.build.js",
+    "dev": "pnpm brand && vue-cli-service serve --mode dev",
+    "build": "pnpm brand && node message_bus.build.js && vue-cli-service build --dest ./build/sysroot/var/lib/casaos/www/ --mode production",
     "lint": "vue-cli-service lint",
     "build:messagebus": "node message_bus.build.js",
     "test": "vitest"
@@ -14,6 +15,8 @@
   },
   "packageManager": "pnpm@9.0.6",
   "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@fontsource/roboto": "^5.0.5",
     "@icewhale/casaos-appmanagement-openapi": "latest",
     "@icewhale/casaos-openapi": "latest",

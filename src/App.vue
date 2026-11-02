@@ -1,12 +1,5 @@
 <template>
 	<div id="app" :class="{'is-dark-bg':$route.meta.showBackground}" class="is-flex is-flex-direction-column" :style="{'--vh': vh}" >
-		<template v-if="$route.meta.showBackground">
-			<!-- Background Layer Start -->
-			<casa-wallpaper :animate="isWelcome?initAni:noneAni"></casa-wallpaper>
-			<!-- Background Layer End -->
-
-		</template>
-
 		<!-- Router View Start -->
 		<router-view/>
 		<!-- Router View End -->
@@ -15,7 +8,6 @@
 </template>
 
 <script>
-import CasaWallpaper from './components/wallpaper/CasaWallpaper.vue'
 import {mixin}       from './mixins/mixin';
 
 const customIconConfig = {
@@ -51,7 +43,6 @@ const customIconConfig = {
 
 export default {
 	components: {
-		CasaWallpaper
 	},
 	mixins: [mixin],
 	data() {

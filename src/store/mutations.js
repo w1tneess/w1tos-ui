@@ -33,18 +33,6 @@ const mutations = {
     state.sidebarOpen = !state.sidebarOpen
   },
 
-  SET_WALLPAPER(state, wallpaper) {
-    localStorage.setItem('wallpaper', wallpaper.path)
-    state.wallpaperObject = wallpaper
-  },
-
-  SET_DEFAULT_WALLPAPER(state) {
-    state.wallpaperObject = {
-      path: require('@/assets/background/wallpaper01.jpg'),
-      from: 'Built-in', // Built-in, Upload, Files
-    }
-  },
-
   SET_IS_MOBILE(state, val) {
     state.isMobile = val
   },

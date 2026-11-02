@@ -34,12 +34,6 @@ const state = {
   currentPath: '',
   isViewGird: true,
 
-  // Wallpaper
-  wallpaperObject: {
-    path: require('@/assets/background/wallpaper01.jpg'),
-    from: 'Built-in', // Built-in, Upload, Files
-  },
-
   // Samba and nfs data
   networkStorage: JSON.parse(localStorage.getItem('networkStorage')) || [],
 

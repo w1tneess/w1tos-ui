@@ -41,7 +41,7 @@ module.exports = {
 			item.use("style-resources-loader")
 				.loader("style-resources-loader")
 				.options({
-					patterns: ["./src/assets/scss/common/_variables.scss", "./src/assets/scss/common/_color.scss"],
+					patterns: ["./src/assets/scss/common/_brand.generated.scss", "./src/assets/scss/common/_variables.scss", "./src/assets/scss/common/_color.scss"],
 				})
 				.end();
 		});
