@@ -3,8 +3,6 @@ import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import sortBy from 'lodash/sortBy'
 import noticeBlock from '@/components/noticBlock/noticeBlock'
 import { mixin } from '@/mixins/mixin'
-import SyncBlock from '@/components/syncthing/SyncBlock.vue'
-import SmartBlock from '@/components/smartHome/SmartBlock.vue'
 import events from '@/events/events'
 import Business_ShowNewAppTag from '@/mixins/app/Business_ShowNewAppTag'
 import DiskLearnMore from '@/components/Storage/DiskLearnMore.vue'
@@ -12,7 +10,7 @@ import { ice_i18n } from '@/mixins/base/common-i18n'
 
 export default {
   name: 'CoreService',
-  components: { SmartBlock, SyncBlock, NoticeBlock: noticeBlock, Swiper, SwiperSlide },
+  components: { NoticeBlock: noticeBlock, Swiper, SwiperSlide },
   mixins: [mixin, Business_ShowNewAppTag],
   inject: ['homeShowFiles'],
   data() {
@@ -53,15 +51,12 @@ export default {
     }
   },
   computed: {
-    recommendShow() {
-      return this.$store.state.recommendSwitch
-    },
     noticeLength() {
       return Object.keys(this.noticesData).length
     },
     // full width to show with single notice card
     showFullCard() {
-      return this.noticeLength === 1 && !this.recommendShow
+      return this.noticeLength === 1
     },
   },
   watch: {
@@ -568,14 +563,8 @@ export default {
     <SwiperSlide v-for="(noticeCard, key) in noticesData" :key="key" :class="{ _singleWidth: showFullCard }">
       <NoticeBlock :notice-data="noticeCard" :notice-type="key" @delete-notice="refreshNotice" />
     </SwiperSlide>
-    <SwiperSlide v-if="recommendShow">
-      <SyncBlock />
-    </SwiperSlide>
-    <SwiperSlide v-if="recommendShow">
-      <SmartBlock />
-    </SwiperSlide>
     <template #pagination>
-      <div v-show="recommendShow || noticeLength !== 0" class="swiper-pagination" />
+      <div v-show="noticeLength !== 0" class="swiper-pagination" />
     </template>
     <template #button-prev>
       <img

@@ -66,7 +66,6 @@ export default {
     }
     if (sessionStorage.getItem('fromWelcome')) {
       this.$messageBus('global_newvisit')
-      this.rssConfirm()
       // one-off consumption
       sessionStorage.removeItem('fromWelcome')
     }
@@ -202,26 +201,6 @@ export default {
       }
     },
 
-    // one-off
-    rssConfirm() {
-      this.$buefy.dialog.confirm({
-        title: this.$t('Show news feed from CasaOS Blog'),
-        message: this.$t('CasaOS dashboard will get the the latest news feed of https://blog.casaos.io via Internet, which might leave your visit records to the site. Do you accept?'),
-        type: 'is-dark',
-        confirmText: this.$t('Accept'),
-        cancelText: this.$t('Cancel'),
-        onConfirm: async () => {
-          const systemConfig = await this.$api.users.getCustomStorage('system')
-          const barData = systemConfig.data.data
-          barData.rss_switch = true
-          const saveRes = await this.$api.users.setCustomStorage('system', barData)
-          this.barData = saveRes.data.data
-        },
-        onCancel: () => {
-          this.barData.rss_switch = false
-        },
-      })
-    },
 
     // show storage settings modal
     async showStorageManagerPanelModal() {

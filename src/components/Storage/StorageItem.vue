@@ -39,7 +39,6 @@
 				</b-button>
 			</div>
 			<p v-else-if="item.usePercent >= 80" class="has-text-right is-flex is-flex-direction-column-reverse">
-				<a rel="noopener" href="https://wiki.casaos.io/zh/guides" target="_blank">{{ $t("Free up storage") }}</a>
 			</p>
 		</div>
 		<b-progress :type="item.usePercent | getProgressType" :value="item.usePercent || 0"

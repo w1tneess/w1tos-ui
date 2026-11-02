@@ -63,9 +63,7 @@ export const mixin = {
 		 * @return {String} lang
 		 */
 		getLangFromBrowser() {
-			let lang = navigator.language || navigator.userLanguage;
-			lang = lang.toLowerCase().replace("-", "_");
-			return lang
+			return 'en_us' // English only
 		},
 
 
