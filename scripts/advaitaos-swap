@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+WWW=/var/lib/casaos/www
+case "${1:-}" in
+  deploy)
+    [ -d "$WWW.stock" ] || cp -a "$WWW" "$WWW.stock"
+    rm -rf "$WWW.new" && mkdir "$WWW.new"
+    tar --no-same-owner -xzf "$2" -C "$WWW.new"
+    chmod -R a+rX "$WWW.new"
+    chown -R root:root "$WWW.new"
+    [ -f "$WWW.new/index.html" ] || { echo "no index.html in upload; aborting"; exit 1; }
+    rm -f "$2"
+    rm -rf "$WWW.prev"; mv "$WWW" "$WWW.prev"; mv "$WWW.new" "$WWW" ;;
+  rollback) [ -d "$WWW.prev" ]  && { rm -rf "$WWW.bad"; mv "$WWW" "$WWW.bad"; mv "$WWW.prev" "$WWW"; } ;;
+  stock)    [ -d "$WWW.stock" ] && { rm -rf "$WWW.bad"; mv "$WWW" "$WWW.bad"; cp -a "$WWW.stock" "$WWW"; } ;;
+  *) echo "usage: advaitaos-swap deploy <tgz> | rollback | stock"; exit 1 ;;
+esac

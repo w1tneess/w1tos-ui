@@ -25,11 +25,10 @@ const isDev = process.env.NODE_ENV === 'dev';
 const protocol = document.location.protocol
 const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:'
 const devIp = process.env.VUE_APP_DEV_IP
-const devPort = process.env.VUE_APP_DEV_PORT
 const localhost = document.location.host
 const localhostName = document.location.hostname
 const baseIp = isDev ? `${devIp}` : `${localhostName}`
-const baseURL = isDev ? `${devIp}:${devPort}` : `${localhost}`
+const baseURL = `${localhost}` // dev goes through the webpack proxy too, so nothing is cross-origin
 const wsURL = `${wsProtocol}//${baseURL}`
 
 const socket = io( {

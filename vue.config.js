@@ -2,8 +2,16 @@ const webpack = require("webpack");
 const path = require("path");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const dotenv = require("dotenv");
-const isProd = process.env.NODE_ENV === "prod";
+const isProd = process.env.NODE_ENV === "production";
 const TerserPlugin = require("terser-webpack-plugin");
+
+// Only NODE_ENV and VUE_APP_* may reach the bundle; the whole env includes tokens and paths.
+const pub = Object.fromEntries(
+	Object.entries(process.env).filter(([k]) => k === "NODE_ENV" || k.startsWith("VUE_APP_"))
+);
+pub.BASE_URL = "/"; // the router reads process.env.BASE_URL, which this define replaces
+
+const target = `http://${process.env.VUE_APP_DEV_IP}:${process.env.VUE_APP_DEV_PORT}`;
 
 module.exports = {
 	publicPath: "/",
@@ -46,7 +54,7 @@ module.exports = {
 
 		config.plugin("define").use(require("webpack/lib/DefinePlugin"), [
 			{
-				"process.env": JSON.stringify(process.env),
+				"process.env": JSON.stringify(pub),
 				BUILT_TIME: JSON.stringify(Date()),
 			},
 		]);
@@ -67,8 +75,7 @@ module.exports = {
 				.use(require("css-minimizer-webpack-plugin"), [
 					{ minimizerOptions: { preset: ["default", { discardComments: { removeAll: true } }] } },
 				]);
-		} else {
-			// Development only
+		} else if (process.env.ANALYZE) {
 			config.plugin('webpack-bundle-analyzer')
 				.use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
 		}
@@ -79,12 +86,14 @@ module.exports = {
 		hot: true,
 		proxy: {
 			"/v1": {
-				target: `http://${process.env.VUE_APP_DEV_IP}:${process.env.VUE_APP_DEV_PORT}`,
+				target,
 				changeOrigin: true,
+				ws: true,
 			},
 			"/v2": {
-				target: `http://${process.env.VUE_APP_DEV_IP}:${process.env.VUE_APP_DEV_PORT}`,
+				target,
 				changeOrigin: true,
+				ws: true,
 			},
 		},
 	},
