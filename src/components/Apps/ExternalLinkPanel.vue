@@ -253,9 +253,9 @@ export default {
 .message-alert {
     padding: 0.4rem 1rem;
     margin-bottom: 1.75rem;
-    background: #fff7e6;
+    background: var(--surface);
     border-radius: 4px;
-    color: #d99000;
+    color: var(--warn);
     font-size: 0.875rem;
 }
 </style>
@@ -268,6 +268,6 @@ export default {
 }
 
 .smb-media {
-    color: #999;
+    color: var(--muted);
 }
 </style>

@@ -322,9 +322,9 @@ export default {
         img {
             max-width: 90vw;
             max-height: 90vh;
-            border: 3px solid #ccc;
+            border: 3px solid var(--line);
             border-radius: 1rem;
-            box-shadow: 0 0 40px 0 rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 40px 0 color-mix(in srgb, var(--bg) 20%, transparent);
         }
     }
 

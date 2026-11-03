@@ -81,8 +81,8 @@
 }
 
 .icon-shadow {
-	background: linear-gradient(180deg, #F7FAFC 0%, #F0F2F5 100%);
-	box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+	background: linear-gradient(180deg, var(--surface) 0%, var(--surface) 100%);
+	box-shadow: 1px 2px 4px color-mix(in srgb, var(--bg) 20%, transparent);
 	border-radius: 18.75%;
 	box-sizing: border-box;
 	overflow: hidden;

@@ -11,14 +11,14 @@
 		font-weight: 400;
 		font-size: 0.875rem;
 		line-height: 1.25rem;
-		color: rgba(41, 52, 61, 1);
+		color: var(--text);
 	}
 	
 	&.is-success,
 	&.is-danger,
 	&.is-warning {
 		background: $white !important;
-		color: rgba(41, 52, 61, 1);
+		color: var(--text);
 		
 		&::before {
 			margin-right: 0.5rem;

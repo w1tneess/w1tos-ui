@@ -127,9 +127,9 @@ export default {
 	}
 
 	.circle-btn {
-		background: rgba(123, 123, 123, 0.16);
+		background: color-mix(in srgb, var(--line-active) 16%, transparent);
 		backdrop-filter: blur(24px);
-		color: #fff;
+		color: var(--text);
 		font-size: 1rem;
 		height: 2.25rem;
 		width: 2.25rem;
@@ -139,13 +139,13 @@ export default {
 		&:hover,
 		&:active {
 			outline: none;
-			color: #fff;
+			color: var(--text);
 			opacity: 0.8;
 		}
 
 		&:focus {
-			color: #fff;
-			border-color: #fff;
+			color: var(--text);
+			border-color: var(--line);
 		}
 
 		&:focus:not(:active) {
@@ -157,7 +157,7 @@ export default {
 		display: block !important;
 
 		.dropdown-content {
-			background: rgba(0, 0, 0, 0.8);
+			background: color-mix(in srgb, var(--raised) 80%, transparent);
 			backdrop-filter: blur(1rem);
 			width: 16rem;
 			border-radius: 0.5rem;
@@ -168,7 +168,7 @@ export default {
 
 			.switch input[type="checkbox"]+.check {
 				background: transparent;
-				border: #fff 1px solid;
+				border: var(--line) 1px solid;
 			}
 		}
 	}

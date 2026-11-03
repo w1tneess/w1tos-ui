@@ -803,7 +803,7 @@ export default {
 
 ._footer {
 	height: 3.5rem;
-	border-top: 1px solid rgb(228 233 237);
+	border-top: 1px solid var(--line);
 }
 
 ._title {
@@ -814,7 +814,7 @@ export default {
 	letter-spacing: 0em;
 	text-align: left;
 	padding: 1.25rem 1.25rem 0.5rem 1.5rem;
-	border-bottom: 1px solid rgb(228 233 237);
+	border-bottom: 1px solid var(--line);
 }
 
 ._is-normal {
@@ -827,11 +827,11 @@ export default {
 }
 
 ._has-text-attention {
-	color: hsla(18, 98%, 55%, 1);
+	color: var(--err);
 }
 
 ._has-text-gray {
-	color: hsla(208, 14%, 58%, 1);
+	color: var(--muted);
 }
 
 ._fixed-height {
@@ -896,13 +896,13 @@ export default {
 	.set-select {
 		.select {
 			&::after {
-				border-color: #000 !important;
+				border-color: var(--line-strong) !important;
 			}
 		}
 
 		select {
 			background-color: transparent !important;
-			border-color: #000 !important;
+			border-color: var(--line-strong) !important;
 		}
 	}
 
@@ -956,7 +956,7 @@ export default {
 	}
 
 	.icon {
-		color: rgb(74, 74, 74);
+		color: var(--text-soft);
 	}
 }
 
@@ -1002,10 +1002,10 @@ export default {
 
 @media (prefers-color-scheme: dark) {
 	.top-bar {
-		background: rgba(53, 54, 58, 1);
+		background: var(--raised);
 
 		.picon {
-			color: #fff;
+			color: var(--text);
 		}
 	}
 }
@@ -1023,7 +1023,7 @@ export default {
 }
 
 ._has-background-blue {
-	background: hsla(208, 100%, 75%, 1);
+	background: var(--accent);
 }
 
 ._modal {
@@ -1035,8 +1035,8 @@ export default {
 			border-radius: 0rem;
 
 			.message-header {
-				background: hsla(0, 0%, 100%, 1);
-				border-bottom: 1px solid hsla(208, 16%, 94%, 1);
+				background: var(--surface);
+				border-bottom: 1px solid var(--line);
 				//margin-top: 1.25rem;
 				//margin-left: 1.5rem;
 				padding: 1.25rem 1.5rem 0.75rem 1.5rem;
@@ -1047,7 +1047,7 @@ export default {
 					justify-content: center;
 					vertical-align: middle;
 
-					color: hsla(208, 20%, 20%, 1);
+					color: var(--text);
 
 					font-family: $family-sans-serif;
 					font-size: 1rem;
@@ -1075,19 +1075,19 @@ export default {
 			}
 
 			.message-body {
-				background: hsla(0, 0%, 100%, 1);
+				background: var(--surface);
 				padding-top: 1rem;
 				padding-bottom: 1rem;
 			}
 		}
 
 		footer {
-			border: 1px solid hsla(208, 16%, 94%, 1);
+			border: 1px solid var(--line);
 
 			button {
 				border-radius: 0.875rem;
 				border: none;
-				color: hsla(0, 0%, 100%, 1);
+				color: var(--text);
 				height: 2rem;
 
 				img {

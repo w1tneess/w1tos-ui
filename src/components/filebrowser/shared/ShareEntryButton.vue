@@ -92,11 +92,11 @@ export default {
 
 <style lang="scss" scoped>
 .popper {
-	background-color: #505459;
+	background-color: var(--raised);
 	padding: 0.35rem 0.4rem 0.35rem 0.75rem;
-	box-shadow: 0px 1px 2px 1px rgba(0, 1, 0, 0.2);
+	box-shadow: 0px 1px 2px 1px color-mix(in srgb, var(--bg) 20%, transparent);
 	border: none;
-	color: #ffffff;
+	color: var(--text);
 	border-radius: 6px;
 	font-size: 0.85rem;
 	font-weight: 400;
@@ -119,6 +119,6 @@ export default {
 
 <style lang="scss">
 .dark .popper__arrow {
-	border-color: #505459 transparent transparent transparent !important;
+	border-color: var(--line-strong) transparent transparent transparent !important;
 }
 </style>

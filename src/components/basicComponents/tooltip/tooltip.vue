@@ -45,11 +45,11 @@ export default {
 
 <style scoped>
 ._has-background-green {
-	background: hsla(118, 70%, 45%, 1);
+	background: var(--ok);
 }
 
 ._has-background-red {
-	background: hsla(18, 98%, 55%, 1);
+	background: var(--err);
 }
 
 ._is-normal {

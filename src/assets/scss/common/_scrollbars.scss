@@ -57,7 +57,7 @@
 }
 
 .scrollbars-light::-webkit-scrollbar-thumb {
-	background-color: rgba(0, 0, 0, 0.3);
+	background-color: color-mix(in srgb, var(--raised) 30%, transparent);
 	border-radius: 10px;
 	outline: none;
 }
@@ -71,7 +71,7 @@
 }
 
 .modal-card-body::-webkit-scrollbar-thumb {
-	background-color: rgba(0, 0, 0, 0.3);
+	background-color: color-mix(in srgb, var(--raised) 30%, transparent);
 	border-radius: 10px;
 	outline: none;
 }
@@ -85,7 +85,7 @@
 }
 
 .t-box::-webkit-scrollbar-thumb {
-	background-color: rgba(0, 0, 0, 0.3);
+	background-color: color-mix(in srgb, var(--raised) 30%, transparent);
 	border-radius: 10px;
 	outline: none;
 }
@@ -93,7 +93,7 @@
 .CodeMirror-vscrollbar::-webkit-scrollbar-track-piece,
 .CodeMirror-hscrollbar::-webkit-scrollbar-track-piece {
 	width: 8px;
-	background-color: rgba(140, 130, 130, 0.3);
+	background-color: color-mix(in srgb, var(--line-active) 30%, transparent);
 }
 
 .CodeMirror-vscrollbar::-webkit-scrollbar,
@@ -124,14 +124,14 @@
 
 .scrollbars-light-auto {
 	&::-webkit-scrollbar-thumb {
-		background: rgba(0, 0, 0, 0);
+		background: transparent;
 		border-radius: 10px;
 		outline: none;
 	}
 	
 	&:hover {
 		&::-webkit-scrollbar-thumb {
-			background: rgba(0, 0, 0, 0.2);
+			background: color-mix(in srgb, var(--raised) 20%, transparent);
 		}
 	}
 }

@@ -53,8 +53,8 @@ export default {
 	padding: 4px 8px;
 	font-size: 100%;
 	line-height: 1.5em;
-	color: #666;
-	border: 1px solid #666;
+	color: var(--text-soft);
+	border: 1px solid var(--line-strong);
 	cursor: pointer;
 	border-radius: 2px;
 	background: none;
@@ -62,6 +62,6 @@ export default {
 }
 
 .uploader-btn:hover {
-	background-color: rgba(0, 0, 0, .08);
+	background-color: color-mix(in srgb, var(--raised) 8%, transparent);
 }
 </style>

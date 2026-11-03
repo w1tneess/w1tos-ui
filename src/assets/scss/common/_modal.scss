@@ -26,7 +26,7 @@
         &:before {
             content: '';
             position: absolute;
-            border-left: #363636 2px solid;
+            border-left: var(--line-strong) 2px solid;
             height: 1rem;
             left: 0;
         }
@@ -42,7 +42,7 @@
 
     .modal-card-head {
         padding: 1.25rem 1.25rem .5rem 1.5rem;
-        border-bottom: 1px solid rgb(228 233 237);
+        border-bottom: 1px solid var(--line);
     }
 
     .modal-card-body {
@@ -51,7 +51,7 @@
         .loading-overlay .loading-icon:after {
             -webkit-animation: spinAround 500ms infinite linear;
             animation: spinAround 500ms infinite linear;
-            border: 4px solid #000000;
+            border: 4px solid var(--line-strong);
             border-radius: 9999px;
             border-width: .2rem;
             border-right-color: transparent;
@@ -78,7 +78,7 @@
         .pagination-ellipsis {
             font-size: .875rem;
             height: 2.714em;
-            border: 1px solid #CFCFCF !important;
+            border: 1px solid var(--line) !important;
             border-radius: 4px;
 
             &:focus {
@@ -127,7 +127,7 @@
 
     .modal-card-foot {
         padding: .75rem 1.5rem 1.5rem 1.5rem;
-        border-top: 1px solid rgba(133, 149, 163, .1215686275);
+        border-top: 1px solid color-mix(in srgb, var(--line-active) 12%, transparent);
 
         .button {
             border-radius: 9999px;
@@ -154,8 +154,8 @@
 
         &.is-toggle {
             ul {
-                background: rgba(60, 60, 67, .05);
-                box-shadow: inset 0px 0px 4px rgba(0, 0, 0, .1);
+                background: color-mix(in srgb, var(--raised) 5%, transparent);
+                box-shadow: inset 0px 0px 4px color-mix(in srgb, var(--bg) 10%, transparent);
                 border-radius: 6px;
 
                 li {
@@ -176,10 +176,10 @@
                     &.is-active {
                         a {
                             background: var(--raised);
-                            border: .5px solid rgba(0, 0, 0, .2);
-                            color: #000000;
+                            border: .5px solid color-mix(in srgb, var(--line-strong) 20%, transparent);
+                            color: var(--text);
                             z-index: 1;
-                            box-shadow: 0px .5px 1px rgba(0, 0, 0, .2);
+                            box-shadow: 0px .5px 1px color-mix(in srgb, var(--bg) 20%, transparent);
                         }
                     }
                 }
@@ -189,7 +189,7 @@
 }
 
 .modal-background {
-    background: rgba(0, 0, 0, .8);
+    background: color-mix(in srgb, var(--raised) 80%, transparent);
 }
 
 @media screen and (min-width: 769px) {
@@ -213,7 +213,7 @@
         .modal-card-head {
             height: 3.5rem;
             padding: 1.25rem 1.25rem .5rem 1.5rem;
-            border-bottom: 1px solid rgba(133, 149, 163, .1215686275);
+            border-bottom: 1px solid color-mix(in srgb, var(--line-active) 12%, transparent);
 
             .modal-card-title {
                 font-size: 1rem;

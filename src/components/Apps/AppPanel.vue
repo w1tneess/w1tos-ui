@@ -1303,84 +1303,6 @@ export default {
       <!-- App Store List Start -->
       <section v-if="currentSlide == 0" :class="{ _hideOverflow: !isCasa }" class="modal-card-body pt-3 _pl">
         <template v-if="!isLoadError">
-          <template v-if="recommendList.length > 0">
-            <h3 class="title is-5 has-text-weight-normal">
-              {{ $t('Featured Apps') }}
-            </h3>
-            <!-- Featured Slider Start -->
-            <div class="is-relative featured-app b-line">
-              <Swiper ref="featureSwiper" :options="featureSwiperOptions" class="swiper">
-                <SwiperSlide
-                  v-for="(item, index) in recommendList"
-                  :key="index + item.title + item.id"
-                  class="pb-5"
-                >
-                  <div class="gap" @click="showAppDetial(item.id)">
-                    <b-image
-                      :placeholder="require('@/assets/img/app/swiper_placeholder.png')"
-                      :src="item.thumbnail"
-                      :src-fallback="require('@/assets/img/app/swiper_placeholder.png')"
-                      class="border-8 is-clickable"
-                      ratio="16by9"
-                    />
-                  </div>
-                  <div class="is-flex pt-5 is-align-items-center">
-                    <div class="mr-3" @click="showAppDetial(item.id)">
-                      <b-image
-                        :placeholder="require('@/assets/img/app/default.svg')"
-                        :src="item.icon"
-                        :src-fallback="require('@/assets/img/app/default.svg')"
-                        class="is-64x64 is-clickable icon-shadow"
-                      />
-                    </div>
-                    <div
-                      class="is-flex-grow-1 mr-4 is-clickable"
-                      @click="
-                        showAppDetial(item.id)
-                        $messageBus('appstore_detail', item.title)
-                      "
-                    >
-                      <h6 class="title is-6 mb-2">
-                        {{ item.title }}
-                      </h6>
-                      <p class="is-size-7 two-line">
-                        {{ item.tagline }}
-                      </p>
-                    </div>
-                    <div>
-                      <b-button
-                        v-if="installedList.includes(item.id)"
-                        :loading="item.id == currentInstallId"
-                        rounded
-                        size="is-small"
-                        type="is-primary is-light"
-                        @click="openThirdContainerByAppInfo(item)"
-                      >
-                        {{ $t('launch-and-open') }}
-                      </b-button>
-                      <b-button
-                        v-else
-                        :disabled="!item.architectures?.includes(arch)"
-                        :loading="item.id == currentInstallId"
-                        rounded
-                        size="is-small"
-                        type="is-primary is-light"
-                        @click="
-                          quickInstall(item.id)
-                          $messageBus('appstore_install', item.title)
-                        "
-                      >
-                        {{ $t('Install') }}
-                      </b-button>
-                    </div>
-                  </div>
-                </SwiperSlide>
-              </Swiper>
-              <div class="swiper-button-prev" @click="$messageBus('appstore_slide')" />
-              <div class="swiper-button-next" @click="$messageBus('appstore_slide')" />
-            </div>
-          </template>
-          <!-- Featured Slider End -->
 
           <!-- List condition Start -->
           <div class="is-flex mt-5 mb-5 is-justify-content-center">
@@ -1847,7 +1769,7 @@ export default {
 // appPanel global style
 .app-panel {
     .modal-card-head {
-        background-color: hsla(208, 16%, 94%, 1);
+        background-color: var(--surface);
     }
 
     ._stepStoreList {
@@ -1874,7 +1796,7 @@ export default {
     transition: background 0.3s ease;
 
     &:hover {
-        background-color: hsl(0, 0%, 97%);
+        background-color: var(--surface);
     }
 }
 
@@ -1904,7 +1826,7 @@ export default {
 
     .level {
         .footing {
-            color: hsl(0, 0%, 48%);
+            color: var(--muted);
         }
     }
 
@@ -1959,7 +1881,7 @@ export default {
         }
 
         &::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.2);
+            background: color-mix(in srgb, var(--raised) 20%, transparent);
             border-radius: 10px;
             outline: none;
         }
@@ -2102,9 +2024,9 @@ export default {
     height: 2rem;
     margin-top: 0.5rem;
     margin-bottom: 1rem;
-    background: #fff6e5;
+    background: var(--surface);
     border-radius: 0.25rem;
-    color: #d99000;
+    color: var(--warn);
     font-size: 0.875rem;
     font-style: normal;
 }
@@ -2141,7 +2063,7 @@ export default {
 }
 
 ._b-line {
-    border-bottom: 1px solid hsla(208, 16%, 94%, 1) !important;
+    border-bottom: 1px solid var(--line) !important;
 }
 
 .progress {
@@ -2149,7 +2071,7 @@ export default {
     height: 12px;
 
     &::-webkit-progress-bar {
-        background: rgba(172, 184, 195, 0.4);
+        background: color-mix(in srgb, var(--raised) 40%, transparent);
     }
 
     &::-webkit-progress-value {

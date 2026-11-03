@@ -88,7 +88,7 @@ export default {
 		border-radius: 50%;
 		width: var(--big-radius);
 		height: var(--big-radius);
-		background-color: #0f8fff;
+		background-color: var(--accent);
 		position: absolute;
 		opacity: 0.06;
 		transform: scale(0);

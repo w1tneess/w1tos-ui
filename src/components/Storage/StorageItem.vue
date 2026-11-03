@@ -174,15 +174,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .tag {
-	background-color: hsla(208, 16%, 98%, 1);
-	border: 1px solid hsla(208, 100%, 45%, 1);
-	color: hsla(208, 100%, 45%, 1);
+	background-color: var(--surface);
+	border: 1px solid var(--accent);
+	color: var(--accent);
 	padding: 2px 6px;
 	height: 1.25rem;
 }
 
 .background-item {
-	background-color: hsla(208, 16%, 98%, 1);
+	background-color: var(--surface);
 	border-radius: 0.5rem;
 }
 </style>

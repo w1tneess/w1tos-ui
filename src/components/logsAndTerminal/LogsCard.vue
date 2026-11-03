@@ -75,9 +75,10 @@ export default {
 <style lang="scss" scoped>
 .logs {
 	white-space: pre-wrap;
-	color: #fff;
+	color: var(--text);
 	font-size: 13px;
-	font-family: 'Monaco', 'Consolas', monospace !important;
+	font-family: "JetBrains Mono Variable", monospace !important;
+	background: var(--bg);
 	padding: 0 0.25rem;
 	line-height: 1.5em;
 	overflow-y: auto;

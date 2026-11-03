@@ -474,7 +474,7 @@ export default {
 }
 
 .warn {
-	color: hsla(348, 86%, 61%, 1);
+	color: var(--err);
 }
 
 .hint {
@@ -488,7 +488,7 @@ export default {
 	text-align: center;
 	-webkit-border-radius: 24px;
 	border-radius: 24px;
-	border: 1px solid #ffffff;
+	border: 1px solid var(--line);
 	top: -0.5rem;
 	left: 0.9rem;
 }

@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import terminalTheme from '@/config/terminal.theme'
 import qs from 'qs'
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
@@ -126,21 +127,23 @@ export default {
 		toggleFullScreen() {
 			this.fullscreen = !this.fullscreen
 		},
-		initTerm() {
+		async initTerm() {
 			const term = new Terminal({
 				// rendererType: 'canvas',
 				fontSize: 13,
-				cursorStyle: 'underline', //光标样式
+				cursorStyle: 'block',
 				cursorBlink: true, //光标闪烁
-				theme: { background: '#1E1E1E' },
+				theme: terminalTheme,
 				rows: parseInt(this.rows), //行数
 				cols: parseInt(this.cols), // 不指定行数，自动回车后光标从下一行开始
-				fontFamily: "Consolas, Monaco, monospace",
+				fontFamily: '"JetBrains Mono Variable", monospace',
 			});
 			const attachAddon = new AttachAddon(this.socket);
 
 			term.loadAddon(attachAddon);
 			term.loadAddon(fitAddon);
+			// xterm measures glyph width on open(); wait for the font or columns misalign
+			await document.fonts.load('13px "JetBrains Mono Variable"').catch(() => {});
 			term.open(document.getElementById('xterm'));
 			fitAddon.fit();
 			term.focus();
@@ -231,7 +234,7 @@ export default {
 		}
 
 		&.card-shadow {
-			box-shadow: 0px 40px 80px rgba(115, 120, 128, 0.25) !important;
+			box-shadow: 0px 40px 80px color-mix(in srgb, var(--bg) 25%, transparent) !important;
 			border-radius: 8px;
 		}
 	}

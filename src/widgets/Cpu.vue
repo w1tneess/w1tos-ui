@@ -283,7 +283,7 @@ export default {
 					}
 
 					a {
-						color: #fff !important;
+						color: var(--text) !important;
 						border-bottom: transparent 2px solid !important;
 						padding: 0.5rem 0 0rem 0;
 						margin: 0 0.5rem;
@@ -292,7 +292,7 @@ export default {
 					&.is-active {
 						a {
 							font-weight: 700;
-							border-bottom: #fff 2px solid !important;
+							border-bottom: var(--line) 2px solid !important;
 						}
 					}
 				}
@@ -308,7 +308,7 @@ export default {
 		}
 
 		.more-info {
-			border-top: 1px solid rgba(255, 255, 255, 0.1);
+			border-top: 1px solid color-mix(in srgb, var(--line) 10%, transparent);
 		}
 	}
 }

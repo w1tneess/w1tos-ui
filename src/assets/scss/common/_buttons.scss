@@ -24,46 +24,46 @@
     border-radius: 4px;
 
     &:hover {
-        background-color: #cfcfcf;
+        background-color: var(--raised);
     }
 }
 
 .button.is-grey {
-    background-color: #a6afb9;
+    background-color: var(--raised);
     border-color: transparent;
     color: whitesmoke;
 }
 
 .button.is-light {
-    background-color: #a6afb9;
+    background-color: var(--raised);
     color: white;
 }
 
 .button.is-iina {
-    background-color: #0088cc;
+    background-color: var(--accent);
     color: white;
 
     &:hover {
-        background: findDarkColor(#0088cc);
+        background: findDarkColor(var(--accent));
     }
 }
 
 .button.is-potplayer {
-    background-color: #ecc94b;
+    background-color: var(--warn);
     color: $black;
 
     &:hover {
-        background: findDarkColor(#ecc94b);
+        background: findDarkColor(var(--warn));
         color: $white;
     }
 }
 
 .button.is-vlc {
-    background-color: #dd6b20;
+    background-color: var(--warn);
     color: $white;
 
     &:hover {
-        background: findDarkColor(#dd6b20);
+        background: findDarkColor(var(--warn));
         color: $white;
     }
 }
@@ -83,7 +83,7 @@
 }
 
 .add-button {
-    color: #0e9aff;
+    color: var(--accent);
     margin: 0 0.25rem;
 }
 
@@ -138,10 +138,10 @@
     }
 
     &:hover {
-        background-color: #363636;
+        background-color: var(--raised);
 
         &:before {
-            color: #fff;
+            color: var(--text);
         }
     }
 }
@@ -181,12 +181,12 @@
         transition: all 0.2s;
         position: relative;
         font-size: 1.25rem;
-        color: #fff;
+        color: var(--text);
     }
 
     &:hover {
         &:before {
-            color: #fff;
+            color: var(--text);
         }
     }
 }
@@ -206,32 +206,32 @@
     cursor: pointer;
 
     &:hover {
-        background-color: rgba(0, 0, 0, 0.04);
+        background-color: color-mix(in srgb, var(--raised) 4%, transparent);
 
     }
 
     &:active {
-        background: hsla(208, 16%, 94%, 1);
+        background: var(--surface);
     }
 }
 
 .hover-effect {
     &:hover {
-        background-color: rgba(0, 0, 0, 0.04);
+        background-color: color-mix(in srgb, var(--raised) 4%, transparent);
 
     }
 
     &:active {
-        background: hsla(208, 16%, 94%, 1);
+        background: var(--surface);
     }
 }
 
 .hover-effect-attention {
     &:hover {
-        background: hsla(18, 98%, 94%, 1);
+        background: var(--surface);
     }
 
     &:active {
-        background: hsla(18, 100%, 80%, 1);
+        background: var(--err);
     }
 }

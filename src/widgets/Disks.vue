@@ -137,7 +137,7 @@ export default {
 		height: 12px;
 
 		&::-webkit-progress-bar {
-			background: rgba(172, 184, 195, 0.4);
+			background: color-mix(in srgb, var(--raised) 40%, transparent);
 		}
 
 		&::-webkit-progress-value {

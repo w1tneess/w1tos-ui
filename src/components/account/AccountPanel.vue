@@ -352,7 +352,7 @@ export default {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: color-mix(in srgb, var(--raised) 50%, transparent);
   transition: all 0.3s;
   z-index: 10;
   display: flex;
@@ -370,7 +370,7 @@ export default {
 
   .icon {
     pointer-events: none;
-    color: #fff !important;
+    color: var(--text) !important;
   }
 
   &:hover {
@@ -383,7 +383,7 @@ export default {
   height: 220px;
   overflow: hidden;
   position: relative;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: color-mix(in srgb, var(--raised) 20%, transparent);
   display: flex;
   justify-content: center;
   align-items: center;

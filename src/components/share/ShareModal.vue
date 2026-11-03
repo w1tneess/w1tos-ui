@@ -129,7 +129,7 @@ export default {
 
 <style lang="scss">
 .share-img-shadow {
-	box-shadow: 0px 16px 24px 2px rgba(115, 120, 128, 0.4);
+	box-shadow: 0px 16px 24px 2px color-mix(in srgb, var(--bg) 40%, transparent);
 }
 
 .share-img {
@@ -139,8 +139,8 @@ export default {
 .update-info-container {
 	overflow: hidden;
 	min-height: 20rem;
-	background: #f8f8f8;
-	border: 1px solid rgba(0, 0, 0, 0.1);
+	background: var(--surface);
+	border: 1px solid color-mix(in srgb, var(--line-strong) 10%, transparent);
 	border-radius: 0.75rem;
 	padding: 1.5rem;
 

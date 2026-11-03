@@ -846,8 +846,8 @@ export default {
 
 .shutdown-rounded {
   border-radius: 50%;
-  background-color: #000;
-  color: #fff;
+  background-color: var(--raised);
+  color: var(--text);
 }
 
 .app-card-drop {
@@ -857,7 +857,7 @@ export default {
     .dropdown-content {
       padding: 4px !important;
       background: none;
-      background: hsla(0, 0%, 100%, 1);
+      background: var(--surface);
       border-radius: 10px;
 
       .dropdown-item {
@@ -879,7 +879,7 @@ export default {
         }
 
         span+span i {
-          color: hsla(208, 16%, 42%, 1);
+          color: var(--text-soft);
         }
 
         &.is-text {
@@ -890,24 +890,24 @@ export default {
           border: none !important;
           height: 2rem;
           font-size: 0.875rem;
-          color: hsla(208, 20%, 20%, 1);
+          color: var(--text);
 
           &.running {
-            color: #779e2a !important;
+            color: var(--ok) !important;
           }
 
           &.exited {
-            color: #ff1616 !important;
+            color: var(--err) !important;
           }
         }
 
         &.has-text-red {
           &:hover {
-            background: hsla(18, 98%, 94%, 1);
+            background: var(--surface);
           }
 
           &:active {
-            background: hsla(18, 100%, 80%, 1);
+            background: var(--err);
           }
         }
 
@@ -918,12 +918,12 @@ export default {
         }
 
         &:hover {
-          background-color: hsla(208, 16%, 96%, 1);
+          background-color: var(--surface);
         }
 
         &:active {
           /* Gary/200 */
-          background-color: hsla(208, 16%, 94%, 1);
+          background-color: var(--surface);
         }
       }
 
@@ -933,7 +933,7 @@ export default {
       }
 
       ._b-bor {
-        border-top: hsla(208, 16%, 94%, 1) 1px solid;
+        border-top: var(--line) 1px solid;
 
         .is-text {
           text-decoration: none;
@@ -950,14 +950,14 @@ export default {
         }
 
         .column:first-child {
-          border-right: hsla(208, 16%, 94%, 1) 1px solid;
+          border-right: var(--line) 1px solid;
         }
       }
 
       /*common*/
       .loading-overlay {
         &.is-active {
-          background: hsla(208, 16%, 96%, 1) !important;
+          background: var(--surface) !important;
           justify-content: flex-start;
         }
 
@@ -990,7 +990,7 @@ export default {
     line-height: 1.25rem;
     font-feature-settings: 'pnum' on, 'lnum' on;
 
-    color: hsla(208, 20%, 20%, 1);
+    color: var(--text);
 
   }
 
@@ -1021,7 +1021,7 @@ export default {
     padding-left: 1.5rem;
     padding-top: 1.5rem;
     padding-bottom: 0.75rem;
-    border: 1px solid hsla(208, 16%, 94%, 1);
+    border: 1px solid var(--line);
   }
 
   .modal-card-body {
@@ -1033,7 +1033,7 @@ export default {
       width: 1.25rem;
     }
 
-    border: 1px solid hsla(208, 16%, 94%, 1);
+    border: 1px solid var(--line);
   }
 
   .modal-card-foot {
@@ -1053,7 +1053,7 @@ export default {
 
     .is-dark {
       margin-left: 1rem;
-      background: hsla(208, 100%, 45%, 1);
+      background: var(--accent);
     }
   }
 }

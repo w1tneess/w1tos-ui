@@ -10,7 +10,7 @@
 			font-weight: 400;
 			font-size: 0.875rem;
 			line-height: 1.25rem;
-			color: rgba(41, 52, 61, 1);
+			color: var(--text);
 			padding: 0;
 		}
 
@@ -29,7 +29,7 @@
 			}
 
 			background: $white !important;
-			color: rgba(41, 52, 61, 1);
+			color: var(--text);
 
 			&::before {
 				content: "\e946";

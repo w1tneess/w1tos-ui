@@ -90,7 +90,7 @@ export default {
 
 <style lang="scss">
 .pri-border {
-	border: 0.0625rem solid #0000001A;
+	border: 0.0625rem solid color-mix(in srgb, var(--line-strong) 10%, transparent);
 	border-radius: 0.5rem;
 }
 </style>

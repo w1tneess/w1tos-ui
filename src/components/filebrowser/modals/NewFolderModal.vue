@@ -146,7 +146,6 @@ export default {
 </script>
 
 <style lang="scss">
-//$background: hsl(0, 0%, 97%);
 //$notification-background-color: $background;
 .pri-height {
 	height: 5.625rem;

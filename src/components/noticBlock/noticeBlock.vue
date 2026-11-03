@@ -150,7 +150,7 @@ export default {
 			font-weight: 500;
 			font-size: 1.125rem;
 			line-height: 1.75rem;
-			color: hsla(208, 16%, 96%, 1);
+			color: var(--text);
 		}
 	}
 
@@ -164,7 +164,7 @@ export default {
 			font-weight: 500;
 			font-size: 14px;
 			line-height: 20px;
-			color: hsla(208, 16%, 96%, 1);
+			color: var(--text);
 		}
 	}
 
@@ -194,7 +194,7 @@ export default {
 
 		.line {
 			width: auto;
-			border-top: 1px solid rgba(255, 255, 255, 0.1);
+			border-top: 1px solid color-mix(in srgb, var(--line) 10%, transparent);
 		}
 	}
 }

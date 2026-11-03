@@ -67,7 +67,7 @@ export default {
 		width: 4.5rem;
 		height: 0.75rem;
 		border-radius: 0.25rem;
-		background-color: rgba(133, 149, 163, 0.6);
+		background-color: color-mix(in srgb, var(--line-active) 60%, transparent);
 	}
 }
 </style>

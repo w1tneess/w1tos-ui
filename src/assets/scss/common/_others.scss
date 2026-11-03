@@ -22,14 +22,14 @@
 }
 
 .b-line {
-	border-bottom: #cfcfcf 1px solid;
+	border-bottom: var(--line) 1px solid;
 }
 
 // Shadow
 
 .is-shadow {
-	-webkit-box-shadow: 0px 0px 17px -2px rgba(0, 0, 0, 0.47);
-	box-shadow: 0px 0px 17px -2px rgba(0, 0, 0, 0.47);
+	-webkit-box-shadow: 0px 0px 17px -2px color-mix(in srgb, var(--bg) 47%, transparent);
+	box-shadow: 0px 0px 17px -2px color-mix(in srgb, var(--bg) 47%, transparent);
 }
 
 .fullScreen {
@@ -39,7 +39,7 @@
 }
 
 .fdark-bg {
-	background-color: #1e1e1e !important;
+	background-color: var(--raised) !important;
 }
 
 .flight-bg {
@@ -127,7 +127,7 @@
 				line-height: 2.714em;
 				left: 0.5rem;
 				z-index: 10;
-				color: hsl(0deg, 0%, 21%);
+				color: var(--text);
 			}
 
 			.input {
@@ -143,11 +143,11 @@
 }
 
 .tabs li.is-active a {
-	color: #2276f3;
-	border-bottom-color: #2276f3;
+	color: var(--accent);
+	border-bottom-color: var(--accent);
 
 	&:focus {
-		border-bottom-color: #2276f3;
+		border-bottom-color: var(--accent);
 	}
 }
 
@@ -169,14 +169,14 @@
 .pagination-link.is-current {
 	background-color: $primary;
 	border-color: $primary;
-	color: #fff;
+	color: var(--text);
 }
 
 a.dropdown-item.is-active,
 .dropdown .dropdown-menu .has-link a.is-active,
 button.dropdown-item.is-active {
 	background-color: $primary;
-	color: #fff;
+	color: var(--text);
 }
 
 // Tooltip
@@ -196,7 +196,7 @@ button.dropdown-item.is-active {
 // Tours
 .v-step {
 	border-radius: 10px !important;
-	box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02) !important;
+	box-shadow: 0 0.5em 1em -0.125em color-mix(in srgb, var(--bg) 10%, transparent), 0 0px 0 1px color-mix(in srgb, var(--bg) 2%, transparent) !important;
 	background-color: $primary !important;
 
 	.v-step__header {
@@ -229,11 +229,11 @@ button.dropdown-item.is-active {
 
 	&:hover {
 		cursor: pointer;
-		background: hsla(208, 16%, 96%, 0.12);
+		background: color-mix(in srgb, var(--surface) 12%, transparent);
 	}
 
 	&:active {
-		background: hsla(208, 16%, 94%, 0.2);
+		background: color-mix(in srgb, var(--surface) 20%, transparent);
 	}
 }
 

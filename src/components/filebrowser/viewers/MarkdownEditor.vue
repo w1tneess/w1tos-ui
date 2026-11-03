@@ -189,13 +189,13 @@ export default {
 	}
 
 	code {
-		background-color: rgba(#616161, 0.1);
-		color: #616161;
+		background-color: var(--raised);
+		color: var(--text-soft);
 	}
 
 	pre {
-		background: #0d0d0d;
-		color: #fff;
+		background: var(--raised);
+		color: var(--text);
 		font-family: "JetBrainsMono", monospace;
 		padding: 0.75rem 1rem;
 		border-radius: 0.5rem;
@@ -219,7 +219,7 @@ export default {
 
 	blockquote {
 		padding-left: 1rem;
-		border-left: 2px solid rgba(#0d0d0d, 0.1);
+		border-left: 2px solid var(--line-active);
 	}
 }
 </style>

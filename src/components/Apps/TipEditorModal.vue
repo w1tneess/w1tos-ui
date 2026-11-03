@@ -180,7 +180,7 @@ export default {
 
 	.modal-card-head {
 		padding-top: 1.25rem;
-		border-bottom: 1px solid hsla(208, 16%, 94%, 1) !important;
+		border-bottom: 1px solid var(--line) !important;
 
 		.close {
 			height: 2rem;
@@ -194,7 +194,7 @@ export default {
 
 		::v-deep .v-md-editor {
 			box-shadow: none;
-			border: 1px solid hsla(208, 16%, 94%, 1);
+			border: 1px solid var(--line);
 			border-radius: 0.375rem;
 
 			overflow: hidden;
@@ -207,7 +207,7 @@ export default {
 				border: 0;
 
 				.scrollbar__wrap {
-					border: 1px solid hsla(208, 100%, 53%, 1);
+					border: 1px solid var(--accent);
 					border-radius: 0.625rem;
 				}
 			}

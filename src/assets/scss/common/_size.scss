@@ -88,15 +88,15 @@
 
 // Color
 .casa-color-blue {
-	color: #3388FF !important;
+	color: var(--accent) !important;
 }
 
 .casa-color-green {
-	color: #28CC87 !important;
+	color: var(--ok) !important;
 }
 
 .casa-color-gray {
-	color: #999999 !important;
+	color: var(--muted) !important;
 }
 
 

@@ -64,12 +64,12 @@ export default {
 		border-radius: $backDropBorderRadius;
 		outline: none;
 		font-size: 0.875rem !important;
-		color: rgba(255, 255, 255, 0.6);
+		color: color-mix(in srgb, var(--text) 60%, transparent);
 		height: 3.5rem;
 
 		&:focus {
 			border: none;
-			box-shadow: rgb(255 255 255 / 25%) 0.5px 1px 1px 0px inset;
+			box-shadow: color-mix(in srgb, var(--bg) 25%, transparent) 0.5px 1px 1px 0px inset;
 		}
 
 		&::placeholder {

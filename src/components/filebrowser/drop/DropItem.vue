@@ -65,7 +65,7 @@
 						:size="80"
 						:thickness="2"
 						animation="default 0 0"
-						emptyColor="#ffffff"
+						:emptyColor="emptyColor"
 						lineMode="in-over"
 					></vue-ellipse-progress>
 				</div>
@@ -128,6 +128,7 @@ export default {
 	},
 	data() {
 		return {
+			emptyColor: getComputedStyle(document.documentElement).getPropertyValue('--raised').trim(),
 			dropFiles: [],
 			dragOver: false,
 			tipActive: false,
@@ -428,12 +429,12 @@ export default {
 			top: 0;
 			background-color: var(--surface);
 			border-radius: 50%;
-			box-shadow: 0px 32px 64px -16px rgba(28, 31, 34, 0.2);
+			box-shadow: 0px 32px 64px -16px color-mix(in srgb, var(--bg) 20%, transparent);
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			transition: all 0.2s ease-in-out;
-			border: 2px solid #ffffff;
+			border: 2px solid var(--line);
 
 			&.is-online {
 				background-color: var(--surface) !important;
@@ -456,7 +457,7 @@ export default {
 
 			.on-line {
 				&::after {
-					background-color: rgba(40, 195, 34, 1);
+					background-color: var(--ok);
 				}
 			}
 
@@ -471,13 +472,13 @@ export default {
 			transform: scale(1.25);
 
 			.up-layer {
-				border: 2px solid #e4e8ec;
+				border: 2px solid var(--line);
 			}
 		}
 
 		&.is-self {
 			.up-layer {
-				border: 2px solid #e4e8ec;
+				border: 2px solid var(--line);
 			}
 		}
 	}

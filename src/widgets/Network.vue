@@ -323,7 +323,7 @@ export default {
 				max-width: 7rem;
 				border-radius: 10px;
 				padding: 4px !important;
-				background: rgba(0, 0, 0, 0.8);
+				background: color-mix(in srgb, var(--raised) 80%, transparent);
 				backdrop-filter: blur(1rem);
 
 				.dropdown-divider {
@@ -337,7 +337,7 @@ export default {
 					overflow: hidden;
 					white-space: nowrap;
 					text-overflow: ellipsis;
-					color: #fff;
+					color: var(--text);
 					font-size: 0.75rem;
 					margin-bottom: 0.25rem;
 
@@ -346,11 +346,11 @@ export default {
 					}
 
 					&:hover {
-						background: rgba(0, 0, 0, 0.2) !important;
+						background: color-mix(in srgb, var(--raised) 20%, transparent) !important;
 					}
 
 					&.is-active {
-						background: rgba(0, 0, 0, 0.2) !important;
+						background: color-mix(in srgb, var(--raised) 20%, transparent) !important;
 					}
 				}
 			}

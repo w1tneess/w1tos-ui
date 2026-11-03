@@ -151,14 +151,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .border-1 {
-	border: 1px solid #e6e6e6;
+	border: 1px solid var(--line);
 	border-radius: 4px;
 }
 
 .warn {
 	position: absolute;
 	z-index: 10;
-	color: hsla(348, 86%, 61%, 1);
+	color: var(--err);
 }
 
 .top--2rem {
@@ -168,20 +168,20 @@ export default {
 }
 
 .combination-box {
-	background-color: hsla(208, 16%, 98%, 1);
-	border: 1px solid hsla(208, 16%, 91%, 1);
+	background-color: var(--surface);
+	border: 1px solid var(--line);
 	border-radius: 12px;
 
 	.combination-title {
-		background-color: hsla(208, 16%, 98%, 1);
-		border: 1px solid hsla(208, 16%, 91%, 1);
+		background-color: var(--surface);
+		border: 1px solid var(--line);
 		border-radius: 4px;
 	}
 
 	.tag {
-		background-color: hsla(208, 16%, 98%, 1);
-		border: 1px solid hsla(208, 100%, 45%, 1);
-		color: hsla(208, 100%, 45%, 1);
+		background-color: var(--surface);
+		border: 1px solid var(--accent);
+		color: var(--accent);
 		padding: 2px 6px;
 		height: 1.25rem;
 	}

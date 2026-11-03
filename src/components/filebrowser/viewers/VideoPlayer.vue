@@ -28,7 +28,7 @@
 				<div key="video-player" ref="artRef" v-if="isVideo" class="player">
 				</div>
 				<aplayer :key="item.path" :autoplay="true" v-if="isAudio" preload="auto" class="player-audio"
-					theme="#41b883" :music="{
+					:theme="accent" :music="{
 						title: audioTitle,
 						artist: audioArtist,
 						src: this.getFileUrl(this.item),
@@ -75,6 +75,8 @@ export default {
 	},
 	data() {
 		return {
+			// players need a literal colour, not var(); read the runtime token
+			accent: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),
 			type: "",
 			ext: "",
 			instance: null,
@@ -133,7 +135,7 @@ export default {
 					fullscreen: true,
 					autoplay: true,
 					pip: true,
-					theme: '#007AE5',
+					theme: this.accent,
 					playsInline: true,
 					screenshot: true,
 					airplay: true,
@@ -176,7 +178,7 @@ export default {
 	background-size: cover;
 	background-position: bottom center;
 	background-attachment: fixed;
-	background-color: rgba(53, 54, 58, 0.4);
+	background-color: color-mix(in srgb, var(--raised) 40%, transparent);
 	-webkit-backdrop-filter: blur(5px) saturate(180%);
 	backdrop-filter: blur(10px) saturate(180%);
 	border: none;

@@ -960,7 +960,7 @@ export default {
 
   ::v-deep .tabs {
     padding: 0 1.5rem;
-    border-bottom: 1px solid hsla(208, 16%, 94%, 1);
+    border-bottom: 1px solid var(--line);
 
     ul {
       border: 0;
@@ -994,8 +994,8 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  -webkit-box-shadow: 0 0 0 2px #ccc;
-  box-shadow: 0 0 0 2px #ccc;
+  -webkit-box-shadow: 0 0 0 2px var(--bg);
+  box-shadow: 0 0 0 2px var(--bg);
   background-color: var(--surface);
 }
 

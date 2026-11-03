@@ -190,7 +190,7 @@ export default {
 		margin-bottom: 0.5rem;
 
 		a {
-			color: #0e9aff;
+			color: var(--accent);
 		}
 
 		ul {
