@@ -7,6 +7,7 @@ import { mixin } from '@/mixins/mixin'
 import messages from '@/assets/lang'
 
 import events from '@/events/events'
+import brand from '@/config/brand.config'
 
 const systemConfigName = 'system'
 
@@ -23,6 +24,10 @@ export default {
   },
   data() {
     return {
+      brand,
+      clock: '',
+      clockTimer: 0,
+      net: { down: 0, up: 0, last: null },
       timer: 0,
       // User
       userInfo: this.$store.state.user,
@@ -141,13 +146,25 @@ export default {
     this.getPort()
   },
   mounted() {
+    this.tick()
+    this.clockTimer = setInterval(this.tick, 10000)
     this.checkVersion()
     this.getUserInfo()
     this.getUsbStatus()
     this.getHardwareInfo()
   },
 
+  beforeDestroy() {
+    clearInterval(this.clockTimer)
+  },
+
   methods: {
+    tick() {
+      this.clock = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+    },
+    rate(bytesPerSec) {
+      return `${this.renderSize(bytesPerSec)}/s`
+    },
     /*************************************************
 		 * PART 0  Common
 		 **************************************************/
@@ -422,26 +439,37 @@ export default {
       this.shutdown = 'Shutdown'
     },
   },
+  sockets: {
+    'casaos:system:utilization'(res) {
+      const nets = JSON.parse(res.Properties.sys_net || '[]')
+      const now = { recv: 0, sent: 0, time: 0 }
+      nets.forEach((n) => {
+        now.recv += n.bytesRecv
+        now.sent += n.bytesSent
+        now.time = Math.max(now.time, n.time)
+      })
+      const last = this.net.last
+      if (last && now.time > last.time) {
+        this.net.down = Math.max(0, (now.recv - last.recv) / (now.time - last.time))
+        this.net.up = Math.max(0, (now.sent - last.sent) / (now.time - last.time))
+      }
+      this.net.last = now
+    },
+  },
 }
 </script>
 
 <template>
   <div class="navbar top-bar is-flex is-align-items-center _fixed-height">
     <div class="navbar-brand ml-4 _fixed-height">
-      <!-- SideBar Button Start -->
-      <div id="sidebar-btn" class="is-flex is-align-items-center navbar-item">
-        <b-tooltip
-          :active="!$store.state.isMobile"
-          :label="sidebarIconLabel"
-          position="is-right"
-          type="is-dark"
-        >
-          <div role="button" @click="showSideBar">
-            <b-icon :icon="sidebarIcon" class="picon" pack="casa" size="is-20" />
-          </div>
-        </b-tooltip>
+      <!-- Status Line Start -->
+      <div class="ao-status">
+        <span class="ao-status__wordmark">{{ brand.wordmark }}</span>
+        <span class="ao-pill ao-hide-sm">{{ brand.user }}@{{ brand.host }}</span>
+        <span class="ao-hide-sm ao-num" aria-label="Network throughput">↓{{ rate(net.down) }} ↑{{ rate(net.up) }}</span>
+        <span class="ao-num">{{ clock }}</span>
       </div>
-      <!-- SideBar Button Start -->
+      <!-- Status Line End -->
 
       <!-- Account Dropmenu Start -->
       <b-dropdown

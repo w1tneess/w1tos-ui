@@ -3,9 +3,7 @@ import lowerFirst from 'lodash/lowerFirst'
 import camelCase from 'lodash/camelCase'
 import find from 'lodash/find'
 import isEqual from 'lodash/isEqual'
-import vueCustomScrollbar from 'vue-custom-scrollbar'
 import Settings from '@/components/widgets/Settings.vue'
-import 'vue-custom-scrollbar/dist/vueScrollbar.css'
 
 const widgetsComponents = require.context(
   '@/widgets',
@@ -19,18 +17,12 @@ export default {
   name: 'SideBar',
   components: {
     Settings,
-    VueCustomScrollbar: vueCustomScrollbar,
   },
   data() {
     return {
       isLoading: true,
       comps: [],
       apps: [],
-      scrollSettings: {
-        suppressScrollY: false,
-        suppressScrollX: true,
-        wheelPropagation: false,
-      },
       widgetsSettings: [],
     }
   },
@@ -73,7 +65,6 @@ export default {
   mounted() {
     this.getConfig()
 
-    window.addEventListener('resize', this.handleResize)
   },
 
   methods: {
@@ -89,7 +80,6 @@ export default {
             this.saveData(initData)
             this.widgetsSettings = initData
             this.isLoading = false
-            this.handleResize()
           }
           else {
             this.diffAndCombineData(initData, res.data.data)
@@ -118,7 +108,6 @@ export default {
         this.saveData(newData)
       }
       this.isLoading = false
-      this.handleResize()
     },
     /**
      * @description: Get Local widgets datas
@@ -150,104 +139,23 @@ export default {
       this.saveData(this.widgetsSettings)
     },
 
-    handleResize() {
-      const ww = window.innerWidth
-      if (this.isLoading)
-        return false
-      const parentWidth = document.querySelector('.slider-content').offsetWidth
-      this.$nextTick(() => {
-        const padding = ww <= 480 ? 0 : -16
-        this.$refs.sidebar.style.width = `${parentWidth + padding}px`
-      })
-    },
 
   },
 }
 </script>
 
 <template>
-  <div v-if="!isLoading" ref="sidebar" :class="{ open: sidebarOpen }" class="side-bar contextmenu-canvas">
-    <VueCustomScrollbar :settings="scrollSettings" class="scroll-area contextmenu-canvas">
-      <div v-for="(item, index) in activeApps" :key="`widgets_${index}`">
-        <component :is="item.app" :class="{ 'last-block': index === activeApps.length - 1 }" />
-      </div>
-    </VueCustomScrollbar>
-    <Settings v-model="widgetsSettings" :class="{ 'mt-4': activeApps.length > 0 }" @change="handleChange" />
+  <!-- display: contents, so each widget is a cell of the Home grid -->
+  <div v-if="!isLoading" class="side-bar">
+    <div v-for="item in activeApps" :key="`widgets_${item.app.name}`" :class="`ao-w-${item.app.name}`" class="ao-cell">
+      <component :is="item.app" />
+    </div>
+    <Settings v-model="widgetsSettings" class="ao-span-12 ao-o-9" @change="handleChange" />
   </div>
 </template>
 
 <style lang="scss">
 .side-bar {
-    z-index: 10;
-    // height: calc(100vh - 6rem);
-    height: calc(var(--vh, 1vh) * 100 - 6rem);
-    overflow: inherit !important;
-    position: fixed;
-
-    @include until(480px) {
-        z-index: 20;
-        left: 0rem;
-        width: auto;
-        margin: 0 0 0 1rem !important;
-        transform: translateX(-100vw);
-        transition: all 0.3s ease-in-out;
-
-        &.open {
-            transform: translateX(0);
-        }
-    }
-}
-
-.scroll-area {
-    position: relative;
-    padding: 0 16px 0 0;
-    margin-right: -16px;
-    max-height: calc(100% - 7.5rem);
-    overflow-x: inherit !important;
-    overflow-y: hidden !important;
-
-    @include until(480px) {
-        max-height: calc(100% - 4rem);
-        height: 100% !important;
-    }
-}
-
-.ps__thumb-x,
-.ps__thumb-y {
-    background-color: var(--raised);
-    width: 8px;
-    right: 5px;
-}
-
-.ps:hover>.ps__rail-x,
-.ps:hover>.ps__rail-y,
-.ps--focus>.ps__rail-x,
-.ps--focus>.ps__rail-y,
-.ps--scrolling-x>.ps__rail-x,
-.ps--scrolling-y>.ps__rail-y {
-    opacity: 0.6;
-    width: 8px;
-}
-
-.ps .ps__rail-x:hover,
-.ps .ps__rail-y:hover,
-.ps .ps__rail-x:focus,
-.ps .ps__rail-y:focus,
-.ps .ps__rail-x.ps--clicking,
-.ps .ps__rail-y.ps--clicking {
-    background-color: transparent;
-    opacity: 0.6;
-}
-
-.ps__rail-x:hover>.ps__thumb-x,
-.ps__rail-x:focus>.ps__thumb-x,
-.ps__rail-x.ps--clicking .ps__thumb-x {
-    height: 8px;
-}
-
-.ps__rail-y:hover>.ps__thumb-y,
-.ps__rail-y:focus>.ps__thumb-y,
-.ps__rail-y.ps--clicking .ps__thumb-y {
-    width: 8px;
+  display: contents;
 }
 </style>

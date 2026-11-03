@@ -1,15 +1,16 @@
 <template>
-	<div class="widget has-text-white clock">
-		<div class="blur-background"></div>
+	<div class="widget clock">
 		<div class="widget-content">
-			<div class="time mb-2 is-clickable" @click="changeFormat">{{ timeText }}</div>
-			<div class="date">{{ dateText }}</div>
+			<div class="widget-title">{{ brand.user }}@{{ brand.host }}</div>
+			<div class="ao-greet">{{ brand.greeting }}</div>
+			<div class="ao-sub">{{ dateText }} · <span class="is-clickable ao-num" @click="changeFormat">{{ timeText }}</span></div>
 		</div>
 	</div>
 </template>
 
 <script>
 import dateFormat from "dateformat";
+import brand from "@/config/brand.config";
 
 export default {
 	// eslint-disable-next-line vue/multi-word-component-names
@@ -19,6 +20,7 @@ export default {
 	initShow: true,
 	data() {
 		return {
+			brand,
 			timer: 0,
 			timeText: "",
 			dateText: "",

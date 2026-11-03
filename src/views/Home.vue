@@ -4,6 +4,7 @@ import SearchBar from '@/components/SearchBar.vue'
 import SideBar from '@/components/SideBar.vue'
 import TopBar from '@/components/TopBar.vue'
 import CoreService from '@/components/CoreService.vue'
+import ContainersCard from '@/components/bento/ContainersCard.vue'
 import AppSection from '@/components/Apps/AppSection.vue'
 import FilePanel from '@/components/filebrowser/FilePanel.vue'
 import UpdateCompleteModal from '@/components/settings/UpdateCompleteModal.vue'
@@ -19,6 +20,7 @@ export default {
     AppSection,
     TopBar,
     CoreService,
+    ContainersCard,
     FilePanel,
   },
   mixins: [mixin],
@@ -213,48 +215,18 @@ export default {
 
     <!-- Content Start -->
     <div class="contents  pt-55 contextmenu-canvas" @contextmenu.prevent="openHomeContaxtMenu">
-      <div class="container">
-        <div class="columns is-variable is-2">
-          <div class="column is-one-quarter slider-content">
-            <!-- SideBar Start -->
-            <SideBar v-if="!hardwareInfoLoading" />
-            <!-- SideBar End -->
-          </div>
-          <div :class="{ open: sidebarOpen }" class="column is-three-quarters main-content">
-            <!-- MainContent Start -->
-            <div class=" contextmenu-canvas">
-              <!-- SearchBar Start -->
-              <section>
-                <transition name="fade">
-                  <SearchBar v-if="searchbarShow" />
-                </transition>
-              </section>
-              <!-- SearchBar End -->
-
-              <!-- core-service Start -->
-              <section>
-                <transition name="fade">
-                  <CoreService />
-                </transition>
-              </section>
-              <!-- core-service End -->
-
-              <!-- Apps Start -->
-              <section>
-                <AppSection ref="apps" />
-              </section>
-              <!-- Apps End -->
-
-              <!-- Shortcuts Start -->
-              <!-- <section>
-								<shortcuts></shortcuts>
-							</section> -->
-              <!-- Shortcuts End -->
-            </div>
-            <!-- MainContent End -->
-          </div>
-        </div>
-      </div>
+      <main class="ao-bento">
+        <!-- Widgets render as grid cells -->
+        <SideBar v-if="!hardwareInfoLoading" />
+        <ContainersCard class="ao-span-6 ao-o-5" />
+        <transition name="fade">
+          <SearchBar v-if="searchbarShow" class="ao-span-12 ao-o-6" />
+        </transition>
+        <CoreService class="ao-span-12 ao-o-7" />
+        <section class="ao-card ao-span-12 ao-o-8">
+          <AppSection ref="apps" />
+        </section>
+      </main>
     </div>
     <!-- Content End -->
 

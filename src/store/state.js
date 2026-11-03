@@ -32,6 +32,8 @@ const state = {
   // Files
   operateObject: null,
   currentPath: '',
+  // Shared by the app grid and the containers card
+  appList: [],
   isViewGird: true,
 
   // Samba and nfs data

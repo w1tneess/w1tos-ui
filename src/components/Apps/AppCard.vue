@@ -802,7 +802,8 @@ export default {
       >
         <div class="has-text-centered is-flex is-justify-content-center is-flex-direction-column pt-5 pb-3px img-c">
           <div class="is-flex is-justify-content-center">
-            <div class="is-relative">
+            <div class="is-relative app-icon-frame">
+              <span v-if="item.app_type === 'system'" aria-label="pinned" class="ao-pin" />
               <b-image
                 :class="dotClass(item.status, isLoading)" :src="item.icon"
                 :src-fallback="require('@/assets/img/app/default.svg')" class="is-64x64"
@@ -827,6 +828,9 @@ export default {
             <a class="one-line" style="cursor:default">
               {{ i18n(item.title) }}
             </a>
+          </p>
+          <p v-if="item.app_type !== 'system' && !isLinkApp" :class="item.status === 'running' ? 'ao-ok' : item.status === 'stopped' ? 'ao-err' : 'ao-warn'" class="ao-app-status">
+            {{ item.status === 'running' ? '● running' : item.status === 'stopped' ? '✕ stopped' : `▲ ${item.status || 'unknown'}` }}
           </p>
         </div>
       </b-tooltip>

@@ -279,6 +279,7 @@ export default {
 
 				const sortedList = sortedAppList.map(obj => obj.name)
 				this.appList = sortedAppList
+				this.$store.commit('SET_APP_LIST', sortedAppList)
 				if (!isEqual(lateSortList, sortedList)) {
 					this.saveSortData()
 				}

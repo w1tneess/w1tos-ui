@@ -1,0 +1,195 @@
+// Bento dashboard: grid, cards, widgets, app tiles, status line. Loaded after the stock styles.
+
+// Helpers
+.ao-mono { font-family: $family-monospace; }
+.ao-num { font-variant-numeric: tabular-nums; }
+.ao-sub { color: var(--muted); font-family: $family-monospace; font-size: 12px; }
+.ao-ok { color: var(--ok); }
+.ao-warn { color: var(--warn); }
+.ao-err { color: var(--err); }
+.ao-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.ao-big { font: 500 24px $family-monospace; color: var(--text); }
+.ao-greet { font: 500 18px $family-monospace; color: var(--text); margin: 2px 0; }
+.ao-one-line { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+// Status line
+.top-bar.navbar {
+	background: var(--bg);
+	border-bottom: 1px solid var(--line);
+	min-height: 44px;
+
+	.navbar-brand { flex: 1; margin-left: 0 !important; padding: 0 12px; }
+	.picon, .icon { color: var(--text-soft); }
+	.navbar-item:hover .picon { color: var(--accent); }
+}
+
+.ao-status {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-right: auto;
+	font-family: $family-monospace;
+	font-size: 12px;
+	color: var(--muted);
+	white-space: nowrap;
+	min-width: 0;
+
+	&__wordmark { color: var(--text); font-size: 13px; }
+}
+
+.ao-pill {
+	padding: 1px 8px;
+	border: 1px solid var(--burgundy);
+	background: var(--maroon);
+	color: var(--text);
+	border-radius: var(--r-sm);
+}
+
+@media (max-width: 767px) {
+	.ao-hide-sm { display: none !important; }
+}
+
+// Grid: 12 columns ≥1280, 6 at 768–1279, 1 below 768
+.ao-bento {
+	max-width: 1440px;
+	margin: 0 auto;
+	padding: 16px;
+	display: grid;
+	gap: 12px;
+	grid-template-columns: repeat(12, minmax(0, 1fr));
+	align-items: start;
+
+	> *, .side-bar > * {
+		min-width: 0;
+		// Fade in without ever hiding: no delay and no fill, so a paused animation leaves content visible
+		animation: ao-card-in 320ms var(--ease-out);
+	}
+}
+
+@keyframes ao-card-in { from { opacity: 0; transform: translateY(4px); } }
+
+.ao-span-4, .ao-w-clock, .ao-w-cpu, .ao-w-network { grid-column: span 4; }
+.ao-span-6, .ao-w-disks { grid-column: span 6; }
+.ao-span-12 { grid-column: 1 / -1; }
+
+.ao-w-clock { order: 1; }
+.ao-w-cpu { order: 2; }
+.ao-w-network { order: 3; }
+.ao-w-disks { order: 4; }
+@for $i from 5 through 9 { .ao-o-#{$i} { order: $i; } }
+
+@media (max-width: 1279px) {
+	.ao-bento { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+	.ao-span-4, .ao-w-cpu, .ao-w-network { grid-column: span 3; }
+	.ao-w-clock, .ao-span-6, .ao-w-disks { grid-column: 1 / -1; }
+}
+
+@media (max-width: 767px) {
+	.ao-bento { grid-template-columns: minmax(0, 1fr); padding: 12px; }
+	.ao-bento > *, .ao-bento .side-bar > * { grid-column: 1 / -1 !important; }
+}
+
+// Cards: new ones and the stock widgets share one look
+.ao-card, .ao-bento .widget {
+	background: var(--surface);
+	border: 1px solid var(--line);
+	border-radius: var(--r-md);
+	box-shadow: inset 0 1px 0 var(--line-glow);
+	color: var(--text-soft);
+	margin-bottom: 0;
+	transition: border-color var(--t-hover) var(--ease-hover);
+
+	&:hover { border-color: var(--line-active); box-shadow: inset 0 1px 0 var(--line-glow); }
+}
+
+.ao-card { padding: 14px 16px; }
+
+.ao-card__title, .ao-bento .widget .widget-title {
+	margin: 0 0 10px;
+	font: 500 11px $family-monospace !important;
+	color: var(--muted) !important;
+	text-transform: lowercase;
+	letter-spacing: 0.04em;
+	line-height: 1.5 !important;
+}
+
+.ao-bento .widget {
+	.blur-background { display: none; }
+	.widget-content { padding: 14px 16px; }
+	&.has-text-white, &.has-text-grey-100, .has-text-white, .title, .disk-info { color: var(--text-soft) !important; }
+	.widget-icon-button .icon { color: var(--muted); }
+	.widget-icon-button:hover .icon { color: var(--accent); }
+	.tabs a { color: var(--muted) !important; }
+	.tabs li.is-active a { color: var(--text) !important; border-bottom-color: var(--accent) !important; }
+	.progress { background: var(--raised); }
+	.header-icon { display: none; }
+	.disk-info { font-family: $family-monospace; font-size: 12px; }
+}
+
+.ao-bento .side-bar > .ao-cell > div > .widget + .widget { margin-top: 12px; }
+
+// Text meter
+.ao-bar {
+	font-family: $family-monospace;
+	font-size: 13px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-variant-numeric: tabular-nums;
+
+	&__lbl { display: inline-block; width: 4ch; color: var(--muted); }
+	&__f { color: var(--accent); }
+	&__e { color: var(--raised); }
+}
+
+// App tiles
+.ao-bento .app-card, .ao-bento .common-card {
+	background: transparent;
+	border: 1px solid transparent;
+	border-radius: var(--r-md);
+	box-shadow: none;
+	transition: border-color var(--t-hover) var(--ease-hover), transform var(--t-hover) var(--ease-hover);
+
+	.blur-background { display: none; }
+	a, p { color: var(--text) !important; font-family: $family-monospace; font-size: 12px; text-transform: lowercase; }
+	.action-btn { opacity: 0; transition: opacity var(--t-hover) var(--ease-hover); .icon { color: var(--muted); } }
+
+	&:hover, &:focus-within {
+		border-color: var(--line-active);
+		transform: translateY(-1px);
+		.action-btn { opacity: 1; }
+		.app-icon-frame { border-color: var(--accent); box-shadow: 0 0 0 1px var(--line-glow); }
+		.app-icon-frame img { filter: none; }
+	}
+}
+
+.app-icon-frame {
+	background: var(--inset);
+	border: 1px solid var(--line);
+	border-radius: var(--r-md);
+	padding: 10px;
+	transition: border-color var(--t-hover) var(--ease-hover), box-shadow var(--t-hover) var(--ease-hover);
+
+	// Warm desaturation so third-party icons sit in the palette; hover restores them
+	img { filter: saturate(0.5) sepia(0.18) contrast(0.94) brightness(0.93); transition: filter var(--t-hover) var(--ease-hover); }
+}
+
+.ao-pin {
+	position: absolute;
+	top: -1px;
+	right: -1px;
+	z-index: 2;
+	width: 8px;
+	height: 8px;
+	background: var(--burgundy);
+	border-radius: 0 var(--r-md) 0 var(--r-sm);
+}
+
+.ao-bento .ao-app-status { font-size: 10px !important; text-transform: none !important; margin-top: 2px; }
+.ao-bento .ao-app-status.ao-ok { color: var(--ok) !important; }
+.ao-bento .ao-app-status.ao-err { color: var(--err) !important; }
+.ao-bento .ao-app-status.ao-warn { color: var(--warn) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+	.ao-bento > *, .ao-bento .side-bar > * { animation: none; }
+}

@@ -33,6 +33,10 @@ const mutations = {
     state.sidebarOpen = !state.sidebarOpen
   },
 
+  SET_APP_LIST(state, list) {
+    state.appList = list
+  },
+
   SET_IS_MOBILE(state, val) {
     state.isMobile = val
   },

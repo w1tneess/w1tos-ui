@@ -13,15 +13,11 @@
 			</div>
 			<!-- Header End -->
 
-			<div class="columns is-mobile mt-0 mb-1">
-				<div class="column is-half has-text-centered">
-					<radial-bar :extendContent="power + temperature" :extendContentClickable="true"
-						:percent="parseInt(cpuSeries)" label="CPU" @extendContentClick="changeFormat"></radial-bar>
-				</div>
-				<div class="column is-half has-text-centered">
-					<radial-bar :extendContent="renderSize(totalMemory)" :percent="parseInt(ramSeries)"
-						label="RAM"></radial-bar>
-				</div>
+			<div class="mt-1 mb-1">
+				<TextBar :percent="parseInt(cpuSeries)" label="cpu">
+					<span class="is-clickable" @click="changeFormat">{{ power }}{{ temperature }}</span>
+				</TextBar>
+				<TextBar :percent="parseInt(ramSeries)" label="mem">{{ renderSize(totalMemory) }}</TextBar>
 			</div>
 			<div v-if="showMore">
 				<div class="more-info pt-1 pb-1">
@@ -67,7 +63,7 @@ import orderBy from "lodash/orderBy";
 import has from "lodash/has";
 import slice from "lodash/slice";
 import { mixin } from "@/mixins/mixin";
-import RadialBar from "@/components/widgets/RadialBar.vue";
+import TextBar from "@/components/bento/TextBar.vue";
 
 export default {
 	// eslint-disable-next-line vue/multi-word-component-names
@@ -77,7 +73,7 @@ export default {
 	initShow: true,
 	mixins: [smoothReflow, mixin],
 	components: {
-		RadialBar,
+		TextBar,
 	},
 
 	data() {
