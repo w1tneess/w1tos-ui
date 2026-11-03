@@ -15,7 +15,7 @@ export default [
 		component: () => import('@/views/Login.vue'),
 		meta: {
 			requireAuth: false,
-			showBackground: true
+			showBackground: false
 		}
 	},
 	{
@@ -25,7 +25,7 @@ export default [
 		component: () => import('@/views/Welcome.vue'),
 		meta: {
 			requireAuth: false,
-			showBackground: true
+			showBackground: false
 		}
 	},
 	{

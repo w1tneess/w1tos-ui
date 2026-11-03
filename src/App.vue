@@ -125,17 +125,12 @@ _____             _____ _____
 	font-size: 0.875rem;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	color: #2c3e50;
+	color: var(--text-soft);
 	overflow-y: hidden;
 
 	&.is-dark-bg {
-		background-color: #000;
+		background-color: var(--bg);
 	}
 
-	& .base-bar {
-		position: fixed;
-		bottom: 0;
-		z-index: 10;
-	}
 }
 </style>

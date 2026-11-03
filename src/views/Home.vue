@@ -34,10 +34,6 @@ export default {
       user_id: localStorage.getItem('user_id') ? localStorage.getItem('user_id') : 1,
       isFileActive: false,
       barData: {},
-      topBarAni: {
-        classes: 'fadeInDown',
-        duration: 800,
-      },
     }
   },
 
@@ -212,7 +208,7 @@ export default {
 <template>
   <div v-if="!isLoading" class="out-container">
     <!-- NavBar Start -->
-    <TopBar v-animate-css="topBarAni" :init-bar-data="barData" @showSideBar="showSideBar" />
+    <TopBar :init-bar-data="barData" @showSideBar="showSideBar" />
     <!-- NavBar End -->
 
     <!-- Content Start -->

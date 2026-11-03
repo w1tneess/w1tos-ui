@@ -19,7 +19,6 @@ import VueDOMPurifyHTML from 'vue-dompurify-html'
 import '@fontsource-variable/inter'
 import '@fontsource-variable/jetbrains-mono'
 import '@/assets/scss/app.scss'
-import VAnimateCss from 'v-animate-css';
 
 const io = require("socket.io-client");
 
@@ -40,7 +39,6 @@ const socket = io( {
 
 Vue.use(Buefy)
 Vue.use(VueFullscreen)
-Vue.use(VAnimateCss, { animateCSSPath: '/css/animate.min.css' });
 Vue.use(Vue2TouchEvents)
 Vue.use(VueSocketIOExt, socket);
 Vue.use(VueSocialSharing);

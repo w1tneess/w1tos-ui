@@ -1,317 +1,133 @@
-<!--
-  * @LastEditors: zhanghengxin ezreal.zhang@icewhale.org
-  * @LastEditTime: 2022/12/1 下午8:02
-  * @FilePath: /CasaOS-UI/src/views/Welcome.vue
-  * @Description:
-  *
-  * Copyright (c) 2022 by IceWhale, All Rights Reserved.
-  -->
-
 <template>
-	<div id="login-page" class="is-flex is-justify-content-center is-align-items-center">
-		<div v-if="!isLoading" v-animate-css="initAni" :class="'step' + step" class="login-panel is-shadow">
+	<div id="login-page" class="ao-prompt">
+		<form class="ao-prompt__form" aria-label="Create account" novalidate @submit.prevent="next">
+			<div class="ao-prompt__wordmark">{{ brand.wordmark }}<span class="ao-cursor" aria-hidden="true"></span></div>
+			<p class="ao-prompt__step">first run · step {{ step }}/3</p>
 
-			<div v-if="step == 1" class="has-text-centered">
-				<div v-animate-css="s1Ani" class=" is-flex is-justify-content-center">
-					<b-image :src="require('@/assets/img/logo/casa-dark.svg')" class="is-128x128 mb-4"></b-image>
-				</div>
+			<label class="ao-prompt__row">
+				<span>user:</span>
+				<input ref="username" v-model="username" :disabled="step !== 1" autocapitalize="off" autocomplete="username"
+					   spellcheck="false" type="text">
+			</label>
 
-				<h2 v-animate-css="s2Ani" class="title is-2 mb-5 has-text-centered __attached_title">{{
-						$t('Welcome to CasaOS')
-					}}</h2>
-				<h2 v-animate-css="s3Ani" class="subtitle  has-text-centered __attached_sub_title">{{
-						$t(`Let's create your initial account`)
-					}}</h2>
-				<b-button v-animate-css="s4Ani" class="mt-2" rounded type="is-primary" @click="goToStep(2)">{{
-						$t(`Go →`)
-					}}
-				</b-button>
-			</div>
+			<template v-if="step >= 2">
+				<label class="ao-prompt__row">
+					<span>password:</span>
+					<input ref="password" v-model="password" :disabled="step !== 2" autocomplete="new-password" type="password">
+				</label>
+				<label class="ao-prompt__row">
+					<span>again:</span>
+					<input v-model="confirmation" :disabled="step !== 2" autocomplete="new-password" type="password">
+				</label>
+			</template>
 
-			<div v-if="step == 2">
-				<h2 class="title is-3  has-text-centered">{{ $t('Create Account') }}</h2>
-				<div class="is-flex is-justify-content-center ">
-					<div class="has-text-centered">
-						<b-image :src="require('@/assets/img/account/default-avatar.svg')" class="is-128x128"
-								 rounded></b-image>
-					</div>
-				</div>
-				<ValidationObserver ref="observer" v-slot="{ handleSubmit }">
-					<ValidationProvider v-slot="{ errors, valid }" name="User" rules="required">
-						<b-field :label="$t('Username')" :message="$t(errors)"
-								 :type="{ 'is-danger': errors[0], 'is-success': valid }">
-							<b-input v-model="username" type="text"
-									 v-on:keyup.enter.native="handleSubmit(register)"></b-input>
-						</b-field>
-					</ValidationProvider>
-					<ValidationProvider v-slot="{ errors, valid }" name="Password" rules="required|min:5"
-										vid="password">
-						<b-field :label="$t('Password')" :message="$t(errors)"
-								 :type="{ 'is-danger': errors[0], 'is-success': valid }"
-								 class="mt-4">
-							<b-input v-model="password" password-reveal type="password"
-									 v-on:keyup.enter.native="handleSubmit(register)"></b-input>
-						</b-field>
-					</ValidationProvider>
-					<ValidationProvider v-slot="{ errors, valid }" name="Password Confirmation"
-										rules="required|confirmed:password">
-						<b-field :label="$t('Confirm Password')" :message="$t(errors)"
-								 :type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-4">
-							<b-input v-model="confirmation" password-reveal type="password"
-									 v-on:keyup.enter.native="handleSubmit(register)"></b-input>
-						</b-field>
-					</ValidationProvider>
-					<b-button class="mt-5" expanded rounded type="is-primary" @click="handleSubmit(register)">
-						{{ $t('Create') }}
-					</b-button>
-				</ValidationObserver>
-			</div>
-
-			<div v-if="step == 3" class="has-text-centered ">
-				<h2 class="title is-3  has-text-centered">{{ $t('All things done!') }}</h2>
-				<div class="is-flex is-align-items-center is-justify-content-center">
-					<lottie-animation :animationData="require('@/assets/ani/done.json')" :autoPlay="true" :loop="false"
-									  class="animation" @complete="complete"></lottie-animation>
-				</div>
-			</div>
-		</div>
+			<p v-if="step === 3" class="ao-prompt__ok" role="status">● account created · signing in…</p>
+			<p v-if="message" class="ao-prompt__err" role="alert">✕ {{ message }}</p>
+			<button v-if="step < 3" :disabled="busy" class="ao-prompt__submit" type="submit">
+				↵ {{ step === 1 ? 'next' : 'create account' }}
+			</button>
+		</form>
 	</div>
 </template>
 
 <script>
-import {ValidationObserver, ValidationProvider} from "vee-validate";
-import "@/plugins/vee-validate";
-import LottieAnimation                          from "lottie-web-vue";
-import smoothReflow                             from 'vue-smooth-reflow'
+import brand from '@/config/brand.config'
 
 export default {
-
 	name: "welcome-page",
-	mixins: [smoothReflow],
 	data() {
 		return {
+			brand,
 			step: 1,
 			username: '',
 			password: '',
-			confirmation: "",
-			isLoading: true,
-			isLogin: false,
-			message: "",
-			notificationShow: false,
-			initAni: {
-				classes: 'zoomIn',
-				delay: 1000,
-				duration: 700
-			},
-			s1Ani: {
-				classes: 'fadeInUp',
-				delay: 1300,
-				duration: 700
-			},
-			s2Ani: {
-				classes: 'fadeInUp',
-				delay: 1700,
-				duration: 700
-			},
-			s3Ani: {
-				classes: 'fadeInUp',
-				delay: 1900,
-				duration: 700
-			},
-			s4Ani: {
-				classes: 'fadeIn',
-				delay: 2500,
-				duration: 700
-			}
+			confirmation: '',
+			message: '',
+			busy: false,
 		}
-	},
-	components: {
-		ValidationObserver,
-		ValidationProvider,
-		LottieAnimation
 	},
 
 	mounted() {
-		this.$smoothReflow({
-			el: '.login-panel',
-			property: ['height', 'width'],
-		})
-		this.isLoading = false;
-
+		this.$refs.username.focus();
 	},
 
 	methods: {
+		next() {
+			this.message = '';
+			if (this.step === 1) {
+				if (!this.username.trim()) {
+					this.message = 'enter a username';
+					return;
+				}
+				this.step = 2;
+				this.$nextTick(() => this.$refs.password.focus());
+				return;
+			}
+			if (this.password.length < 5) {
+				this.message = 'password must be at least 5 characters';
+				return;
+			}
+			if (this.password !== this.confirmation) {
+				this.message = 'passwords do not match';
+				return;
+			}
+			this.register();
+		},
+
 		/**
-		 * @description: register
+		 * @description: register, then sign in with the new account
 		 * @return {*}
 		 */
-		register() {
+		async register() {
+			this.busy = true;
 			const initKey = this.$store.state.initKey;
-			this.$api.users.register(this.username, this.password, initKey).then(res => {
-				if (res.data.success == 200) {
-					this.login().then(() => {
-						// First login set default app order
-						this.$api.users.setCustomStorage("app_order", {data: ["App Store", "Files"]})
-					});
-					this.goToStep(3);
+			try {
+				const res = await this.$api.users.register(this.username, this.password, initKey)
+				if (res.data.success != 200) {
+					this.message = res.data.message || 'could not create the account';
+					return;
 				}
-			}).catch(err => {
-				this.$buefy.toast.open({
-					message: err.response.data.message,
-					type: 'is-danger',
-					position: 'is-top',
-					duration: 5000,
-					queue: false
-				})
-			})
+				this.step = 3;
+				const isLogin = await this.login().catch(() => false);
+				if (isLogin) {
+					// First login set default app order
+					this.$api.users.setCustomStorage("app_order", {data: ["App Store", "Files"]})
+				}
+				this.$router.push(isLogin ? "/" : "/login");
+			} catch (err) {
+				this.message = err.response?.data?.message || 'could not create the account';
+			} finally {
+				this.busy = false;
+			}
 		},
 
 		/**
 		 * @description: login
-		 * @return {*}
+		 * @return {boolean} whether login succeeded
 		 */
 		async login() {
 			const userRes = await this.$api.users.login(this.username, this.password)
-			if (userRes.data.success == 200) {
-				localStorage.setItem("access_token", userRes.data.data.token.access_token);
-				localStorage.setItem("refresh_token", userRes.data.data.token.refresh_token);
-				localStorage.setItem("expires_at", userRes.data.data.token.expires_at);
-				localStorage.setItem("user", JSON.stringify(userRes.data.data.user));
-
-				this.$store.commit("SET_NEED_INITIALIZATION", false);
-				this.$store.commit("SET_INIT_KEY", "");
-				this.$store.commit("SET_USER", userRes.data.data.user);
-				this.$store.commit("SET_ACCESS_TOKEN", userRes.data.data.token.access_token);
-				this.$store.commit("SET_REFRESH_TOKEN", userRes.data.data.token.refresh_token);
-
-				const versionRes = await this.$api.sys.getVersion();
-				if (versionRes.data.success == 200) {
-					localStorage.setItem("version", versionRes.data.data.current_version);
-				}
-				sessionStorage.setItem("fromWelcome", true);
-				this.isLogin = true
-
-			} else {
-				this.isLogin = false
-				this.message = this.$t("Username or Password error!")
-				this.notificationShow = true
+			if (userRes.data.success != 200) {
+				return false;
 			}
-		},
-		goToStep(step) {
-			this.step = step
-		},
-		complete() {
-			if (this.isLogin) {
-				this.$router.push("/");
-			} else {
-				this.$router.push("/login");
+			localStorage.setItem("access_token", userRes.data.data.token.access_token);
+			localStorage.setItem("refresh_token", userRes.data.data.token.refresh_token);
+			localStorage.setItem("expires_at", userRes.data.data.token.expires_at);
+			localStorage.setItem("user", JSON.stringify(userRes.data.data.user));
+
+			this.$store.commit("SET_NEED_INITIALIZATION", false);
+			this.$store.commit("SET_INIT_KEY", "");
+			this.$store.commit("SET_USER", userRes.data.data.user);
+			this.$store.commit("SET_ACCESS_TOKEN", userRes.data.data.token.access_token);
+			this.$store.commit("SET_REFRESH_TOKEN", userRes.data.data.token.refresh_token);
+
+			const versionRes = await this.$api.sys.getVersion();
+			if (versionRes.data.success == 200) {
+				localStorage.setItem("version", versionRes.data.data.current_version);
 			}
-		}
+			sessionStorage.setItem("fromWelcome", true);
+			return true;
+		},
 	}
 }
 </script>
-
-<style lang="scss">
-.animation {
-	width: 120px;
-	height: 120px;
-}
-
-#login-page {
-	height: calc(100% - 5.5rem);
-	position: relative;
-	z-index: 500;
-
-	.login-panel {
-		text-align: left;
-		background: var(--raised);
-		backdrop-filter: blur(1rem);
-		border-radius: 8px;
-		padding: 2.5rem 4rem;
-
-		.label {
-			color: #dfdfdf;
-		}
-
-		.input {
-			background: var(--raised);
-			border-color: transparent;
-		}
-
-		&.step1 {
-			padding: 4rem 6rem;
-		}
-
-		&.step2 {
-			padding: 2.5rem 4rem;
-			width: 32rem;
-		}
-
-		&.step3 {
-			padding: 4rem 8rem;
-		}
-
-		&.step4 {
-			width: 28rem;
-		}
-	}
-}
-
-@media screen and (max-width: 480px) {
-	.login-panel {
-		text-align: left;
-		background: var(--raised);
-		backdrop-filter: blur(1rem);
-		border-radius: 8px;
-		margin: 0 2rem;
-		padding: 2rem !important;
-
-		.label {
-			color: #dfdfdf;
-		}
-
-		.input {
-			background: var(--raised);
-			border-color: transparent;
-		}
-
-		.is-128x128 {
-			height: 96px;
-			width: 96px;
-		}
-
-		.is-3 {
-			font-size: 1.5rem;
-		}
-
-		&.step1 {
-			.is-2 {
-				font-size: 1.5rem;
-			}
-
-			.subtitle {
-				font-size: 1rem;
-			}
-		}
-
-		&.step3 {
-			padding: 4rem !important;
-		}
-	}
-}
-
-
-// Temporary
-.__attached_title {
-	// former color.Not in existing architecture.
-	color: hsl(211, 72%, 20%, 100%);;
-}
-
-.__attached_sub_title {
-	color: hsl(211, 72%, 20%, 60%);
-}
-
-.__op60 {
-	opacity: 0.6;
-}
-</style>
