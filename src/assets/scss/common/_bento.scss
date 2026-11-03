@@ -215,3 +215,14 @@
 
 // File browser icons get the same warm desaturation as app icons; photo thumbnails keep their colour
 img[alt="folder"]:not(.thumb-w):not(.thumb-h) { filter: saturate(0.5) sepia(0.18) contrast(0.94) brightness(0.93); }
+
+.ao-kbd {
+	background: none;
+	border: 1px solid var(--line-strong);
+	border-radius: var(--r-sm);
+	color: var(--text-soft);
+	font: 11px $family-monospace;
+	padding: 0 6px;
+	cursor: pointer;
+	&:hover { border-color: var(--accent); color: var(--accent-hover); }
+}

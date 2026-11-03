@@ -25,6 +25,7 @@ export default {
   data() {
     return {
       brand,
+      isMac: /mac/i.test(navigator.platform),
       clock: '',
       clockTimer: 0,
       net: { down: 0, up: 0, last: null },
@@ -146,6 +147,8 @@ export default {
     this.getPort()
   },
   mounted() {
+    this.$EventBus.$on('casaUI:paletteGo', this.onPaletteGo)
+    this.$EventBus.$on('casaUI:palettePower', this.onPalettePower)
     this.tick()
     this.clockTimer = setInterval(this.tick, 10000)
     this.checkVersion()
@@ -155,10 +158,21 @@ export default {
   },
 
   beforeDestroy() {
+    this.$EventBus.$off('casaUI:paletteGo', this.onPaletteGo)
+    this.$EventBus.$off('casaUI:palettePower', this.onPalettePower)
     clearInterval(this.clockTimer)
   },
 
   methods: {
+    onPaletteGo(target) {
+      if (target === 'settings')
+        this.$refs.settingsDrop.toggle()
+    },
+    // The palette already made the user type the word, so skip the "Are you sure?" step
+    onPalettePower(key) {
+      this[key.toLowerCase()] = 'Are you sure?'
+      this.power(key, true)
+    },
     tick() {
       this.clock = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
     },
@@ -396,12 +410,13 @@ export default {
       })
     },
 
-    power(key) {
+    power(key, fromPalette = false) {
       if (this[key.toLowerCase()] !== 'Are you sure?') {
         this[key.toLowerCase()] = 'Are you sure?'
         return
       }
-      this.$refs.settingsDrop.toggle()
+      if (!fromPalette)
+        this.$refs.settingsDrop.toggle()
       this.showPower = true
       switch (key) {
         case 'Restart':
@@ -468,6 +483,9 @@ export default {
         <span class="ao-pill ao-hide-sm">{{ brand.user }}@{{ brand.host }}</span>
         <span class="ao-hide-sm ao-num" aria-label="Network throughput">↓{{ rate(net.down) }} ↑{{ rate(net.up) }}</span>
         <span class="ao-num">{{ clock }}</span>
+        <button aria-label="Open command palette" class="ao-kbd ao-hide-sm" type="button" @click="$EventBus.$emit('casaUI:paletteToggle')">
+          {{ isMac ? '⌘K' : 'Ctrl K' }}
+        </button>
       </div>
       <!-- Status Line End -->
 

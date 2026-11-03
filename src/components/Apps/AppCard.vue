@@ -130,7 +130,17 @@ export default {
     },
   },
 
+  mounted() {
+    this.$EventBus.$on('casaUI:paletteOpenApp', this.onPaletteOpenApp)
+  },
+  beforeDestroy() {
+    this.$EventBus.$off('casaUI:paletteOpenApp', this.onPaletteOpenApp)
+  },
   methods: {
+    onPaletteOpenApp(name) {
+      if (name === this.item.name)
+        this.openApp(this.item)
+    },
     handleDorpdownPosition(event) {
       this.$nextTick(() => {
         const rightOffset = window.innerWidth - event.clientX - 160

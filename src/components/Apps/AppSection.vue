@@ -200,16 +200,21 @@ export default {
 		}, 5000)
 	},
 	beforeDestroy () {
+		this.$EventBus.$off('casaUI:paletteGo', this.onPaletteGo)
 		this.$EventBus.$off(events.OPEN_APP_STORE_AND_GOTO_SYNCTHING)
 		window.removeEventListener('resize', this.getSkCount)
 
 		clearInterval(this.ListRefreshTimer)
 	},
 	mounted () {
+		this.$EventBus.$on('casaUI:paletteGo', this.onPaletteGo)
 		window.addEventListener('resize', this.getSkCount)
 		this.getSkCount()
 	},
 	methods: {
+		onPaletteGo (target) {
+			if (target === 'store') this.showInstall()
+		},
 		isMobile () {
 			const userAgent = navigator.userAgent
 			const mobileRegex =

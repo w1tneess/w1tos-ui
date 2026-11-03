@@ -53,7 +53,11 @@ export default {
 
     this.$store.commit('SET_ACCESS_ID', nanoid())
   },
+  beforeDestroy() {
+    this.$EventBus.$off('casaUI:paletteGo', this.onPaletteGo)
+  },
   mounted() {
+    this.$EventBus.$on('casaUI:paletteGo', this.onPaletteGo)
     window.addEventListener('resize', this.onResize)
     this.onResize()
     if (localStorage.getItem('is_update') === 'true') {
@@ -124,6 +128,10 @@ export default {
      * @param {*}
      * @return {*} void
      */
+    onPaletteGo(target) {
+      if (target === 'files')
+        this.showFiles()
+    },
     showFiles(path) {
       this.isFileActive = true
       this.$nextTick(() => {

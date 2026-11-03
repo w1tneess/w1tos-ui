@@ -2,6 +2,8 @@
 	<div id="app" :class="{'is-dark-bg':$route.meta.showBackground}" class="is-flex is-flex-direction-column" :style="{'--vh': vh}" >
 		<!-- Router View Start -->
 		<router-view/>
+		<!-- Ctrl/⌘+K, signed-in pages only -->
+		<CommandPalette v-if="$route.meta.requireAuth"/>
 		<!-- Router View End -->
 
 	</div>
@@ -9,6 +11,7 @@
 
 <script>
 import {mixin}       from './mixins/mixin';
+import CommandPalette from './components/palette/CommandPalette.vue';
 
 const customIconConfig = {
 	customIconPacks: {
@@ -43,6 +46,7 @@ const customIconConfig = {
 
 export default {
 	components: {
+		CommandPalette,
 	},
 	mixins: [mixin],
 	data() {
