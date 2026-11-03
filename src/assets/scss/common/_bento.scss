@@ -19,6 +19,7 @@
 	min-height: 44px;
 
 	.navbar-brand { flex: 1; margin-left: 0 !important; padding: 0 12px; }
+	.navbar-menu { display: none; } // empty; it would take the space the brand needs
 	.picon, .icon { color: var(--text-soft); }
 	.navbar-item:hover .picon { color: var(--accent); }
 }
@@ -130,19 +131,37 @@
 
 // Text meter
 .ao-bar {
+	display: flex;
+	align-items: center;
+	gap: 8px;
 	font-family: $family-monospace;
 	font-size: 13px;
 	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
 	font-variant-numeric: tabular-nums;
+	line-height: 1.8;
 
-	&__lbl { display: inline-block; width: 4ch; color: var(--muted); }
-	&__f { color: var(--accent); }
-	&__e { color: var(--raised); }
+	&__lbl { flex: 0 0 4ch; color: var(--muted); }
+	&__track {
+		flex: 0 0 10ch;
+		height: 0.7em;
+		background: var(--raised);
+		border-radius: 2px;
+		overflow: hidden;
+	}
+	&__fill {
+		display: block;
+		height: 100%;
+		background: var(--accent);
+		transition: width var(--t-panel) var(--ease-out);
+		&.is-warn { background: var(--warn); }
+	}
+	&__pct { flex: 0 0 auto; color: var(--text); }
+	.ao-sub { overflow: hidden; text-overflow: ellipsis; }
 }
 
-// App tiles
+// App tiles: size from the tile, not a fixed column count (the grid is now full width)
+.ao-bento .app-list { grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)) !important; }
+
 .ao-bento .app-card, .ao-bento .common-card {
 	background: transparent;
 	border: 1px solid transparent;
@@ -193,3 +212,6 @@
 @media (prefers-reduced-motion: reduce) {
 	.ao-bento > *, .ao-bento .side-bar > * { animation: none; }
 }
+
+// File browser icons get the same warm desaturation as app icons; photo thumbnails keep their colour
+img[alt="folder"]:not(.thumb-w):not(.thumb-h) { filter: saturate(0.5) sepia(0.18) contrast(0.94) brightness(0.93); }

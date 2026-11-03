@@ -476,6 +476,7 @@ export default {
         animation="fade1"
         aria-role="list"
         class="navbar-item"
+        position="is-bottom-left"
         :close-on-click="true"
         @active-change="getUserInfo"
       >
@@ -483,7 +484,7 @@ export default {
           <b-tooltip
             :active="!$store.state.isMobile"
             :label="$t('Account')"
-            position="is-right"
+            position="is-bottom"
             type="is-dark"
             @click.native="$messageBus('account_setting')"
           >
@@ -505,13 +506,14 @@ export default {
         animation="fade1"
         aria-role="list"
         class="navbar-item"
+        position="is-bottom-left"
         @active-change="onOpen"
       >
         <template #trigger>
           <b-tooltip
             :active="!$store.state.isMobile"
             :label="$t('Settings')"
-            position="is-right"
+            position="is-bottom"
             type="is-dark"
             @click.native="$messageBus('dashboardsetting')"
           >
@@ -619,31 +621,6 @@ export default {
           </div>
           <!--  Show other Docker container app(s) Switch End  -->
 
-          <!--  Recommended modules Switch Start  -->
-          <div
-            class="is-flex is-align-items-center mb-1 _is-large _box hover-effect _is-radius pr-2 mr-4 ml-4"
-          >
-            <div class="is-flex is-align-items-center is-flex-grow-1 _is-normal">
-              <b-icon
-                class="mr-1 ml-2"
-                icon="display-applications-outline"
-                pack="casa"
-                size="is-20"
-              />
-              {{ $t("Show Recommended Apps") }}
-            </div>
-            <div>
-              <b-field>
-                <b-switch
-                  v-model="barData.recommend_switch"
-                  class="is-flex-direction-row-reverse mr-0 _small"
-                  type="is-dark"
-                  @input="saveData"
-                />
-              </b-field>
-            </div>
-          </div>
-          <!-- Recommended modules Switch End  -->
 
           <!-- Automount USB Drive Start  -->
           <div
@@ -740,7 +717,7 @@ export default {
         <b-tooltip
           :active="!$store.state.isMobile"
           :label="$t('Terminal & Logs')"
-          position="is-right"
+          position="is-bottom"
           style="height: 1.25rem"
           type="is-dark"
         >
