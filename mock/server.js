@@ -42,6 +42,52 @@ const folder = (path) => {
 	];
 };
 
+
+// App Store catalogue: real CasaOS-AppStore entries (icons/screenshots from that repo's CDN)
+const CDN = 'https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps';
+const catalogue = [
+	['jellyfin', 'Jellyfin', 'Media', 'The free software media system', 'Jellyfin', true],
+	['immich', 'Immich', 'Gallery', 'Self-hosted photo and video backup', 'Immich', true],
+	['nextcloud', 'Nextcloud', 'Cloud', 'Your files, everywhere', 'Nextcloud', true],
+	['vaultwarden', 'Vaultwarden', 'Utilities', 'Bitwarden-compatible password server', 'Vaultwarden', false],
+	['home-assistant', 'Home Assistant', 'Home Automation', 'Open-source home automation', 'HomeAssistant', true],
+	['syncthing', 'Syncthing', 'Backup', 'Continuous file synchronisation', 'Syncthing', false],
+	['pihole', 'Pi-hole', 'Network', 'Network-wide ad blocking', 'Pi-hole', false],
+	['qbittorrent', 'qBittorrent', 'Downloader', 'Open-source BitTorrent client', 'qBittorrent', false],
+	['portainer', 'Portainer', 'Developer', 'Container management UI', 'Portainer', false],
+	['uptime-kuma', 'Uptime Kuma', 'Utilities', 'Self-hosted monitoring tool', 'UptimeKuma', false],
+	['navidrome', 'Navidrome', 'Media', 'Modern music server and streamer', 'Navidrome', false],
+	['audiobookshelf', 'Audiobookshelf', 'Media', 'Audiobook and podcast server', 'Audiobookshelf', false],
+].map(([id, title, category, tagline, dir, recommend]) => ({
+	id, recommend,
+	info: {
+		title: { en_us: title }, tagline: { en_us: tagline }, category, author: 'CasaOS Team', developer: title,
+		description: { en_us: `${title}: ${tagline.toLowerCase()}. (mock description)` },
+		icon: `${CDN}/${dir}/icon.png`, thumbnail: `${CDN}/${dir}/thumbnail.png`,
+		screenshot_link: [1, 2, 3].map((n) => `${CDN}/${dir}/screenshot-${n}.png`),
+		architectures: ['amd64', 'arm64'], main: id, port_map: '8096', scheme: 'http', index: '/',
+		tips: {},
+	},
+}));
+const installedIds = ['jellyfin', 'immich', 'nextcloud', 'vaultwarden', 'home-assistant', 'syncthing', 'pihole', 'qbittorrent', 'portainer', 'uptime-kuma'];
+const storeList = (q) => {
+	const cat = q.get('category'); const rec = q.get('recommend') === 'true';
+	const items = catalogue.filter((a) => (!cat || a.info.category === cat) && (!rec || a.recommend));
+	return { list: Object.fromEntries(items.map((a) => [a.id, a.info])), installed: installedIds, community: [], recommend: [] };
+};
+const categories = () => {
+	const counts = {};
+	catalogue.forEach((a) => { counts[a.info.category] = (counts[a.info.category] || 0) + 1; });
+	return [{ name: 'All', font: 'apps', count: catalogue.length, description: '' },
+		...Object.entries(counts).map(([name, count]) => ({ name, font: 'apps', count, description: '' }))];
+};
+const composeOf = (id) => ({
+	name: id,
+	services: { [id]: { image: `mock/${id}:latest`, deploy: { resources: { reservations: { memory: '268435456' } } }, ports: [{ target: 8096, published: '8096', protocol: 'tcp' }] } },
+	'x-casaos': { main: id, title: { en_us: id }, architectures: ['amd64', 'arm64'], index: '/', port_map: '8096', scheme: 'http' },
+});
+const composeYaml = (id) => `name: ${id}\nservices:\n  ${id}:\n    image: mock/${id}:latest\n    ports:\n      - target: 8096\n        published: "8096"\n        protocol: tcp\nx-casaos:\n  main: ${id}\n  architectures: [amd64, arm64]\n  index: /\n  port_map: "8096"\n  scheme: http\n  title:\n    en_us: ${id}\n`;
+
 const routes = {
 	'GET /users/status': () => ok({ initialized: true, key: '' }),
 	'POST /users/login': () => ok({ token: { access_token: 'mock', refresh_token: 'mock', expires_at: now() + 86400 }, user }),
@@ -57,11 +103,13 @@ const routes = {
 	'GET /sys/usb-auto-mount': () => ok({ state: 'off' }),
 	'GET /v2/app_management/web/appgrid': () => ok(apps),
 	'GET /v2/casaos/health/ports': () => ok({ tcp: [], udp: [] }),
-	'GET /v2/app_management/apps': () => ok({ list: {}, recommend: [], installed: [], community: [] }),
-	'GET /v2/app_management/categories': () => ok([]),
+	'GET /v2/app_management/apps': (url) => ok(storeList(url.searchParams)),
+	'GET /v2/app_management/categories': () => ok(categories()),
+	'POST /v2/app_management/compose': () => ok('mock: install accepted (no container is created)'),
 	'GET /v2/app_management/appstore': () => ok([]),
 	'GET /disks': () => ok([]),
 	'GET /container/usage': () => ok([]),
+	'GET /container/networks': () => ok([{ id: 'n1', name: 'bridge', driver: 'bridge' }, { id: 'n2', name: 'host', driver: 'host' }, { id: 'n3', name: 'macvlan0', driver: 'macvlan' }]),
 	'GET /v2/users/events': () => [], // the UI reads this one as a bare array
 	'GET /storage': () => ok([]),
 	'GET /cloud': () => ok([]),
@@ -83,6 +131,14 @@ http.createServer((req, res) => {
 		const key = `${req.method} ${path}`;
 		let out;
 		const custom = path.match(/^\/users\/current\/custom\/([\w-]+)$/);
+		const app = path.match(/^\/v2\/app_management\/apps\/([\w-]+)(\/compose)?$/);
+		if (app && req.method === 'GET' && !routes[key]) {
+			const id = app[1];
+			if (app[2] && /yaml/.test(req.headers.accept || '')) { res.writeHead(200, { 'Content-Type': 'application/yaml' }); return res.end(composeYaml(id)); }
+			const entry = catalogue.find((a) => a.id === id);
+			res.writeHead(entry ? 200 : 404, { 'Content-Type': 'application/json' });
+			return res.end(JSON.stringify(app[2] ? ok({ compose: composeOf(id), store_info: entry?.info }) : (entry ? ok(entry.info) : { success: 404, message: 'app not found' })));
+		}
 		// No socket.io server here; refuse fast instead of answering JSON
 		if (path.startsWith('/v2/message_bus/socket.io')) { res.writeHead(404); return res.end(); }
 		if (custom && req.method === 'GET') out = ok(storage[custom[1]] ?? '');

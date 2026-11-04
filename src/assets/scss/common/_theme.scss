@@ -77,3 +77,26 @@ body, html { background: var(--bg); color: var(--text-soft); }
 
 // Bulma utility classes bypass the colour tokens; map the light one onto the palette
 .has-background-white { background-color: var(--raised) !important; }
+
+// v-md-editor (App Store descriptions, Markdown files) ships its own light stylesheet
+.v-md-editor {
+	background: var(--surface) !important;
+	color: var(--text-soft);
+	box-shadow: none !important;
+	&.v-md-editor--preview { background: transparent !important; }
+	.v-md-editor__toolbar { background: var(--raised); border-bottom: 1px solid var(--line); }
+	.v-md-editor__toolbar-item { color: var(--muted); &:hover, &--active { background: var(--accent-tint); color: var(--text); } }
+	.v-md-editor__editor-wrapper, .v-md-editor__preview-wrapper { border-color: var(--line) !important; }
+	.v-md-textarea-editor, .v-md-textarea-editor pre, .v-md-textarea-editor textarea { background: var(--inset) !important; color: var(--text) !important; caret-color: var(--accent); }
+	.github-markdown-body {
+		color: var(--text-soft);
+		h1, h2, h3, h4, h5, h6, strong { color: var(--text); border-color: var(--line); }
+		a { color: var(--accent); }
+		hr { background: var(--line); }
+		blockquote { color: var(--muted); border-left-color: var(--line-active); }
+		code, pre, .v-md-pre-wrapper { background: var(--inset) !important; color: var(--text); }
+		table tr { background: transparent; border-color: var(--line); }
+		table th, table td { border-color: var(--line); }
+		table tr:nth-child(2n) { background: var(--raised); }
+	}
+}

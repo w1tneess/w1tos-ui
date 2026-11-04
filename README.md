@@ -24,7 +24,8 @@ It is not affiliated with or endorsed by IceWhale. "CasaOS" is their name for th
 | **Command palette** | `Ctrl+K` / `⌘K` to open apps, go to Files / App Store / Settings, or restart / shut down (you type the word to confirm). |
 | **Privacy** | No telemetry posted to the message bus, and no request to IceWhale's blog RSS feed. App icons are the only third-party requests left. |
 | **Build safety** | Only `NODE_ENV` and `VUE_APP_*` reach the bundle. The stock build embedded the whole build-machine environment (paths, user names, any tokens). |
-| **Removed** | Wallpapers, the news feed, the Discord/feedback promos, the app-store "Featured" slider, recommended-app cards, and every language except English |
+| **App Store** | Unchanged behaviour from CasaOS: Featured apps, categories, search, app details, one-click and custom (compose) install, and third-party store sources. Only the colours differ. |
+| **Removed** | Wallpapers, the news feed, the Discord/feedback promos, the dashboard's recommended-app cards, and every language except English |
 
 <table>
 <tr>
@@ -44,7 +45,8 @@ It is not affiliated with or endorsed by IceWhale. "CasaOS" is their name for th
 | Area | State |
 |---|---|
 | Production build, unit tests (`pnpm test`), env-leak check | ✅ passes, also in CI |
-| Login, dashboard layout (1400 px, 900 px, 360 px with no horizontal scroll), Files, App Store, Settings menu, command palette | ✅ tested against the mock backend |
+| Login, dashboard layout (1400 px, 900 px, 360 px with no horizontal scroll), Files, Settings menu, command palette | ✅ tested against the mock backend |
+| App Store: Featured, categories, list, detail page, install request (same API calls as stock CasaOS), store-source input | ✅ tested against the mock's 12-app catalogue |
 | Live stats and network rates (Socket.IO), terminal and logs, installing apps | ⚠️ not tested: needs a real server, because the mock has no socket |
 | Signing in through Cloudflare Access, the deploy script, the server swap script | ⚠️ written, not yet run |
 
