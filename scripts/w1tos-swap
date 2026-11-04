@@ -13,5 +13,5 @@ case "${1:-}" in
     rm -rf "$WWW.prev"; mv "$WWW" "$WWW.prev"; mv "$WWW.new" "$WWW" ;;
   rollback) [ -d "$WWW.prev" ]  && { rm -rf "$WWW.bad"; mv "$WWW" "$WWW.bad"; mv "$WWW.prev" "$WWW"; } ;;
   stock)    [ -d "$WWW.stock" ] && { rm -rf "$WWW.bad"; mv "$WWW" "$WWW.bad"; cp -a "$WWW.stock" "$WWW"; } ;;
-  *) echo "usage: advaitaos-swap deploy <tgz> | rollback | stock"; exit 1 ;;
+  *) echo "usage: w1tos-swap deploy <tgz> | rollback | stock"; exit 1 ;;
 esac

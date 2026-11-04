@@ -27,7 +27,7 @@
 		gap: 12px;
 		margin-bottom: 12px;
 
-		span { flex: 0 0 auto; min-width: 10ch; color: var(--muted); }
+		span { flex: 0 0 13ch; color: var(--muted); } // fits "w1tos login:" so both fields line up
 
 		input {
 			flex: 1;

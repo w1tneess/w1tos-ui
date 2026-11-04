@@ -1,68 +1,174 @@
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=IceWhaleTech_CasaOS-UI&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=IceWhaleTech_CasaOS-UI)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=IceWhaleTech_CasaOS-UI&metric=bugs)](https://sonarcloud.io/summary/new_code?id=IceWhaleTech_CasaOS-UI)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=IceWhaleTech_CasaOS-UI&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=IceWhaleTech_CasaOS-UI)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=IceWhaleTech_CasaOS-UI&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=IceWhaleTech_CasaOS-UI)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=IceWhaleTech_CasaOS-UI&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=IceWhaleTech_CasaOS-UI)
+# w1tOS UI
 
-# How to develop this project
+A dark, keyboard-first web interface for a home server running [CasaOS](https://github.com/IceWhaleTech/CasaOS).
+It replaces only the web UI. The CasaOS backend, its APIs, Docker and your apps stay exactly as they are.
 
-## Prerequisites
-1. Node 18 ([installation instructions](https://github.com/nvm-sh/nvm?tab=readme-ov-file#usage))
-2. pnpm@9.0.6 ([installation instructions](https://pnpm.io/installation))
+![Dashboard](docs/screenshots/dashboard.jpg)
 
-## Environment variables
-If you want to connect dev UI version to your local CasaOS server, you will need to set up a couple of env variables:
-1. Copy `.env.dev` to `.env.dev.local` (this file is git-ignored)
-2. Set `VUE_APP_DEV_IP` to IP address of your local CasaOS server
+> **Status: early, single-maintainer project.** Everything below marked *tested* was checked in a browser against
+> the bundled mock backend. It has **not yet been run against a real CasaOS server**, so expect rough edges there.
+> See [What is and isn't tested](#what-is-and-isnt-tested).
 
-## Set up dev server
-```shell
-# install dependencies
+w1tOS UI is an independent fork of [IceWhaleTech/CasaOS-UI](https://github.com/IceWhaleTech/CasaOS-UI) (Apache-2.0).
+It is not affiliated with or endorsed by IceWhale. "CasaOS" is their name for their product.
+
+---
+
+## What's different from the stock CasaOS UI
+
+| Area | w1tOS UI |
+|---|---|
+| **Look** | Espresso-and-gold dark theme everywhere: no wallpaper, no blur. Every colour comes from one token set. |
+| **Login / first run** | Terminal-style prompt (`w1tos login:`), Enter to submit, inline errors |
+| **Dashboard** | Bento grid (12 / 6 / 1 columns) with a status line: `w1t@w1tos · ↓ ↑ rates · clock`. CPU and memory shown as text meters, plus a containers card. |
+| **Command palette** | `Ctrl+K` / `⌘K` to open apps, go to Files / App Store / Settings, or restart / shut down (you type the word to confirm). |
+| **Privacy** | No telemetry posted to the message bus, and no request to IceWhale's blog RSS feed. App icons are the only third-party requests left. |
+| **Build safety** | Only `NODE_ENV` and `VUE_APP_*` reach the bundle. The stock build embedded the whole build-machine environment (paths, user names, any tokens). |
+| **Removed** | Wallpapers, the news feed, the Discord/feedback promos, the app-store "Featured" slider, recommended-app cards, and every language except English |
+
+<table>
+<tr>
+<td><img src="docs/screenshots/login.jpg" alt="Login prompt"></td>
+<td><img src="docs/screenshots/palette.jpg" alt="Command palette"></td>
+</tr>
+<tr>
+<td align="center">Login</td>
+<td align="center">Command palette</td>
+</tr>
+</table>
+
+![Files](docs/screenshots/files.jpg)
+
+## What is and isn't tested
+
+| Area | State |
+|---|---|
+| Production build, unit tests (`pnpm test`), env-leak check | ✅ passes, also in CI |
+| Login, dashboard layout (1400 px, 900 px, 360 px with no horizontal scroll), Files, App Store, Settings menu, command palette | ✅ tested against the mock backend |
+| Live stats and network rates (Socket.IO), terminal and logs, installing apps | ⚠️ not tested: needs a real server, because the mock has no socket |
+| Signing in through Cloudflare Access, the deploy script, the server swap script | ⚠️ written, not yet run |
+
+Known gaps:
+- Restarting from the palette while Files is open shows the "Restarting" box behind Files.
+- The palette has no "logs / terminal for an app" action yet.
+- Favicons and home-screen icons are still the stock images.
+- `color-mix()` needs a 2023-or-newer browser.
+
+## Requirements
+
+- A server running CasaOS. This UI is built from CasaOS-UI **v0.4.5** and expects that version's API; other versions may differ.
+- To build: Node 22 LTS and pnpm 9.0.6 (`corepack enable` provides it)
+
+## Try it locally, without a server
+
+```bash
 pnpm install
-
-# build
-pnpm dev 
+pnpm mock        # terminal 1: mock CasaOS API on 127.0.0.1:8090 with sample data
+pnpm dev         # terminal 2: opens the UI; any username and password log in
 ```
 
-# How to build this project
+Create `.env.dev.local` (git-ignored) so the dev server uses the mock:
 
-```shell
-# install dependencies
-pnpm install
-
-# build
-pnpm build 
+```
+VUE_APP_DEV_IP=127.0.0.1
+VUE_APP_DEV_PORT=8090
 ```
 
-# How to test this project
+## Develop against your own server
 
-```shell
+Point `.env.dev.local` at the machine that runs CasaOS: the IP and port you open its web UI at, **not** this computer.
+
+```
+VUE_APP_DEV_IP=192.168.1.50
+VUE_APP_DEV_PORT=80
+```
+
+`pnpm dev` proxies `/v1` and `/v2`, WebSockets included, so everything is same-origin and there are no CORS issues.
+
+## Build
+
+```bash
+pnpm build       # output: build/sysroot/var/lib/casaos/www/
 pnpm test
 ```
 
-# How to contribute to this project
+## Install on the server
 
-CasaOS is a community-driven open source project and the people involved are CasaOS users. That means CasaOS will always
-need contributions from community members just like you!
+The UI is plain static files that replace `/var/lib/casaos/www/`. The included scripts swap it atomically and keep the
+stock UI for rollback.
 
-- See <https://wiki.casaos.io/en/contribute> for ways of contribution to CasaOS
-- See <https://wiki.casaos.io/en/contribute/development> if you want to be involved in code contribution specificially
+**One-time server setup.** Copy `scripts/w1tos-swap` to `/usr/local/bin/w1tos-swap`. Make it root-owned with mode 755, and allow only that script through sudo:
 
+```
+youruser ALL=(root) NOPASSWD: /usr/local/bin/w1tos-swap
+```
 
-# How to contact this project
+**Deploy** (Windows PowerShell; needs SSH key access to the server):
 
-The word Casa comes from the Spanish word for "home". Project CasaOS originated as a pre-installed system for
-crowdfunded product [ZimaBoard](https://www.zimaboard.com) on Kickstarter.
+```powershell
+pnpm build
+./scripts/deploy.ps1 -Server youruser@your-server
+```
 
-After looking at many systems and software on the market, the team found no server system designed for home scenarios,
-sadly true.
+`deploy.ps1` refuses to upload if the bundle contains build-machine environment values. On the server:
 
-So, we set out to build this open source project to develop CasaOS with our own hands, everyone in the community, and
-you.
+```bash
+sudo w1tos-swap rollback   # back to the previous deploy
+sudo w1tos-swap stock      # back to the original CasaOS UI (kept from the first deploy)
+```
 
-We believes that through community-driven collaborative innovation and open communication with global developers, we can
-reshape the digital home experience like never before.
+Running a CasaOS update from its UI will probably reinstall the stock UI. If that happens, deploy again.
 
-**A warm welcome for you to get help or share great ideas in the [Discord](https://discord.gg/knqAbbBbeX)!**
+### Behind Cloudflare Tunnel + Access
 
-[![Discord Card](https://discordapp.com/api/guilds/884667213326463016/widget.png?style=banner2)](https://discord.gg/knqAbbBbeX)
+- Add a cache rule that **bypasses cache** for the hostname. `/js/custom.js`, `/css/custom.css` and `favicon.ico` are not content-hashed, so Cloudflare would serve stale copies.
+- The manifest link already uses `crossorigin="use-credentials"` so it loads behind Access.
+
+## Customise
+
+`src/config/brand.config.js` is the only file a fork needs to edit:
+
+```js
+module.exports = {
+  osName: 'w1tOS',
+  wordmark: 'w1tOS',
+  user: 'w1t',
+  host: 'w1tos',         // status line shows w1t@w1tos
+  greeting: 'Welcome back',
+  theme: 'espresso-gold',
+};
+```
+
+Colours live in `scripts/brand.build.js`. It generates the Sass variables (which Bulma needs at compile time), the runtime CSS variables and the
+terminal theme from one preset, and runs automatically before `dev` and `build`. Components use `var(--token)` only.
+There are no hard-coded colours outside the generated files, and CI keeps it that way.
+
+| Token | Value | Use |
+|---|---|---|
+| `--bg` / `--surface` / `--raised` | `#0E0A07` / `#17110C` / `#291C0E` | page, cards, modals |
+| `--text` / `--text-soft` / `--muted` | `#F2E5C6` / `#E1D4C2` / `#A78D78` | headings, body, labels |
+| `--accent` / `--accent-hover` | `#D9A441` / `#F2D9A0` | buttons, focus ring, cursor |
+| `--burgundy` / `--maroon` | `#75162D` / `#560B18` | brand mark only (user@host pill, pinned badge) |
+| `--ok` / `--warn` / `--err` | `#68B684` / `#E8894A` / `#D9535E` | always paired with `●` / `▲` / `✕` |
+
+Every token pair used for text meets WCAG AA (for example, primary text on the page background is 15.8:1).
+
+## Project layout
+
+```
+src/config/brand.config.js     name, user@host, theme
+scripts/brand.build.js         palette → Sass + CSS vars + xterm theme
+src/assets/scss/common/        _theme (global overrides), _bento (dashboard), _prompt (login)
+src/components/palette/        command palette
+src/components/bento/          containers card, text meter
+mock/server.js                 local mock of the CasaOS API
+scripts/deploy.ps1, w1tos-swap deploy and rollback
+design/                        static palette proof and dashboard mockup
+tests/                         node:test unit tests
+```
+
+## License
+
+Apache-2.0, the same as upstream. See [LICENSE](LICENSE) and [NOTICE](NOTICE). This is a modified version of
+CasaOS-UI © IceWhale Technology, and the per-file upstream copyright headers are kept. Fonts are Inter and JetBrains Mono
+(SIL OFL), installed from npm.

@@ -7,7 +7,7 @@ const PORT = 8090;
 const ok = (data) => ({ success: 200, message: 'ok', data });
 const storage = {}; // custom storage (widgets_config, app_order, system...) kept in memory
 
-const user = { id: 1, username: 'advaita', role: 'admin', email: '', nickname: 'advaita', avatar: '', description: '' };
+const user = { id: 1, username: 'w1t', role: 'admin', email: '', nickname: 'w1t', avatar: '', description: '' };
 const now = () => Math.floor(Date.now() / 1000);
 let netBase = 5e9;
 

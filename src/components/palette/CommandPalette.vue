@@ -22,7 +22,8 @@ export default {
 				.filter(app => app.app_type !== 'system')
 				.map(app => ({
 					id: `app-${app.name}`, group: 'apps', label: `open ${app.name}`,
-					hint: app.status === 'running' ? '● running' : app.status, run: () => this.$EventBus.$emit('casaUI:paletteOpenApp', app.name),
+					hint: app.status === 'running' ? '● running' : app.status === 'stopped' ? '✕ stopped' : `▲ ${app.status || 'unknown'}`,
+					hintClass: app.status === 'running' ? 'ao-ok' : app.status === 'stopped' ? 'ao-err' : 'ao-warn', run: () => this.$EventBus.$emit('casaUI:paletteOpenApp', app.name),
 				}))
 			return [
 				...apps,
@@ -160,7 +161,7 @@ export default {
 							@click="active = index; runActive()" @mousemove="active = index"
 						>
 							<span><template v-if="item.danger">✕ </template>{{ item.label }}</span>
-							<span v-if="item.hint" class="ao-sub">{{ item.hint }}</span>
+							<span v-if="item.hint" :class="item.hintClass" class="ao-palette__hint">{{ item.hint }}</span>
 						</li>
 					</template>
 					<li v-if="!results.length" class="ao-palette__empty" role="presentation">no match</li>
@@ -250,6 +251,8 @@ export default {
 		// Danger is the text, never a red row
 		&.is-danger { color: var(--err); }
 	}
+
+	&__hint { font-size: 11px; }
 
 	&__empty, &__confirm { padding: 12px 14px; margin: 0; color: var(--muted); }
 	&__foot { padding: 8px 14px; border-top: 1px solid var(--line); font-size: 11px; }

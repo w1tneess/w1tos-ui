@@ -1,32 +1,35 @@
-name: push_test_server
+name: CI
 
 on:
-    pull_request:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
 
 jobs:
-    test:
-        if: github.repository == 'IceWhaleTech/CasaOS-UI'
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                node-version: [ 16.x ]
-            # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-        steps:
-            -   uses: actions/checkout@v3
-            -   name: '使用 Use Node.js ${{ matrix.node-version }}'
-                uses: actions/setup-node@v3
-                with:
-                    node-version: ${{ matrix.node-version }}
-                    cache: 'npm'
-            -   name: '缓存 Cache'
-                uses: actions/cache@v3
-                id: cache-dependencies
-                with:
-                    path: node_modules
-                    key: ${{runner.OS}}-${{hashFiles('**/yarn.lock')}}
-
-            -   run: yarn install
-
-            -   name: 'Unit tests'
-                run: yarn test
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: No hard-coded colours outside the generated palette
+        run: |
+          ! grep -rnoiE '#[0-9a-f]{3,8}\b|hsla?\(|rgba?\(' src --include='*.vue' --include='*.scss' \
+            | grep -v '_variables.scss\|generated'
+      - run: pnpm test
+      - run: pnpm build
+      - name: No build-machine environment in the bundle
+        run: |
+          ! grep -rlE '"(PATH|HOME|USER|GITHUB_TOKEN)":"' build --include='*.js'
+      - name: Vue ships in production mode
+        run: |
+          ! grep -rl 'running Vue in development mode' build --include='*.js'
