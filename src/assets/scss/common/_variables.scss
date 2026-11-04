@@ -271,11 +271,11 @@ $backDropShadow: rgb(255 255 255 / 12.5%) 0.5px 1px 1px 0px inset;
 $avatar-border-color: hsl(0, 0%, 89%);
 
 // Loading
-$loading-background: rgba(14, 10, 7, 0.72);
+$loading-background: rgba($ao-bg, 0.72);
 $loading-icon-size: 2.5rem;
 
 // Modal
-$modal-background-background-color: rgba(14, 10, 7, 0.72);
+$modal-background-background-color: rgba($ao-bg, 0.72);
 
 // SideBar
 $sidebar-width: 22.5rem;

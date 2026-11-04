@@ -18,7 +18,7 @@ It is not affiliated with or endorsed by IceWhale. "CasaOS" is their name for th
 
 | Area | w1tOS UI |
 |---|---|
-| **Look** | Espresso-and-gold dark theme everywhere: no wallpaper, no blur. Every colour comes from one token set. |
+| **Look** | Dusk plum and canyon-peach dark theme everywhere: no wallpaper, no blur. Every colour comes from one token set. A second theme, espresso-gold, is included. |
 | **Login / first run** | Terminal-style prompt (`w1tos login:`), Enter to submit, inline errors |
 | **Dashboard** | Bento grid (12 / 6 / 1 columns) with a status line: `w1t@w1tos · ↓ ↑ rates · clock`. CPU and memory shown as text meters, plus a containers card. |
 | **Command palette** | `Ctrl+K` / `⌘K` to open apps, go to Files / App Store / Settings, or restart / shut down (you type the word to confirm). |
@@ -135,23 +135,30 @@ module.exports = {
   user: 'w1t',
   host: 'w1tos',         // status line shows w1t@w1tos
   greeting: 'Welcome back',
-  theme: 'espresso-gold',
+  theme: 'plum-peach',   // or 'espresso-gold'
 };
 ```
 
-Colours live in `scripts/brand.build.js`. It generates the Sass variables (which Bulma needs at compile time), the runtime CSS variables and the
+Two presets ship: **plum-peach** (default) and **espresso-gold**. Colours live in `scripts/brand.build.js`. It generates the Sass variables (which Bulma needs at compile time), the runtime CSS variables and the
 terminal theme from one preset, and runs automatically before `dev` and `build`. Components use `var(--token)` only.
 There are no hard-coded colours outside the generated files, and CI keeps it that way.
 
-| Token | Value | Use |
-|---|---|---|
-| `--bg` / `--surface` / `--raised` | `#0E0A07` / `#17110C` / `#291C0E` | page, cards, modals |
-| `--text` / `--text-soft` / `--muted` | `#F2E5C6` / `#E1D4C2` / `#A78D78` | headings, body, labels |
-| `--accent` / `--accent-hover` | `#D9A441` / `#F2D9A0` | buttons, focus ring, cursor |
-| `--burgundy` / `--maroon` | `#75162D` / `#560B18` | brand mark only (user@host pill, pinned badge) |
-| `--ok` / `--warn` / `--err` | `#68B684` / `#E8894A` / `#D9535E` | always paired with `●` / `▲` / `✕` |
+plum-peach tokens:
 
-Every token pair used for text meets WCAG AA (for example, primary text on the page background is 15.8:1).
+| Token | Value | Use | Contrast |
+|---|---|---|---|
+| `--bg` / `--surface` / `--raised` | `#1A1117` / `#24161F` / `#341F2C` | page, cards, modals | |
+| `--text` / `--text-soft` / `--muted` | `#FAEFE9` / `#E2D5C2` / `#B49BA7` | headings, body, labels | 16.4 / 12.0 / 6.8 : 1 |
+| `--accent` / `--accent-hover` | `#F4A384` / `#F8C1A6` | buttons, focus ring, cursor, meters (gold-to-peach gradient) | 9.2 : 1 |
+| `--cool` | `#8FB3C9` | secondary data (network upload, terminal blue) | 7.8 : 1 |
+| `--burgundy` / `--maroon` | `#7A5063` / `#4A2C3F` | brand mark only (user@host pill, pinned badge) | text on pill 10.8 : 1 |
+| `--ok` / `--warn` / `--err` | `#8CC49A` / `#EECB88` / `#EE6E78` | always paired with `●` / `▲` / `✕` | 8.7 / 11.2 / 5.9 : 1 |
+| `--line-strong` | `#9C7A8B` | input underlines, control edges | 4.9 : 1 |
+
+Contrast is measured on `--surface`, except text and accent, which are measured on `--bg`. Every text pair passes WCAG AA, and
+controls pass the 3:1 non-text rule. The accent is far enough from the text (ΔE 40) and from the error colour (ΔE 28) that
+peach never reads as danger. The surfaces come from Obsidian Plum `#4A2C3F` and the text from Baby Blossom `#FAEFE9` and
+Onion White `#E2D5C2`. The accent is Creamy Peach `#F4A384`, and the gold and terracotta come from the canyon palette.
 
 ## Project layout
 

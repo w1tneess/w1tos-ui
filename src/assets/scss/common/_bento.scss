@@ -151,7 +151,7 @@
 	&__fill {
 		display: block;
 		height: 100%;
-		background: var(--accent);
+		background: var(--accent-gradient);
 		transition: width var(--t-panel) var(--ease-out);
 		&.is-warn { background: var(--warn); }
 	}

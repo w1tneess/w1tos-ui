@@ -5,5 +5,5 @@ module.exports = {
 	user: 'w1t',
 	host: 'w1tos', // status line shows w1t@w1tos
 	greeting: 'Welcome back',
-	theme: 'espresso-gold', // presets live in scripts/brand.build.js
+	theme: 'plum-peach', // or 'espresso-gold'; presets live in scripts/brand.build.js
 };

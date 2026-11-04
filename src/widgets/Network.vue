@@ -90,8 +90,8 @@ export default {
 				dataLabels: {
 					enabled: false,
 				},
-				// series 0 = up (muted), 1 = down (accent); read from the runtime tokens
-				colors: ['--muted', '--accent'].map(v => getComputedStyle(document.documentElement).getPropertyValue(v).trim()),
+				// series 0 = up (cool), 1 = down (accent); read from the runtime tokens
+				colors: ['--cool', '--accent'].map(v => getComputedStyle(document.documentElement).getPropertyValue(v).trim()),
 				stroke: {
 					curve: 'smooth',
 					width: 1,
@@ -248,7 +248,7 @@ export default {
 	z-index: 10;
 
 	.up {
-		color: var(--muted);
+		color: var(--cool);
 	}
 
 	.down {
