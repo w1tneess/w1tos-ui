@@ -1,9 +1,10 @@
 <script>
 import { fuzzyFilter } from '@/utils/fuzzy'
+import { currentTheme, setTheme, themes } from '@/utils/theme'
 
 // Actions are sent over $EventBus; the components that already own each flow
 // (AppCard, Home, AppSection, TopBar) carry them out, so nothing is duplicated here.
-const GROUPS = ['go', 'apps', 'system']
+const GROUPS = ['go', 'apps', 'theme', 'system']
 
 export default {
 	name: 'CommandPalette',
@@ -14,6 +15,7 @@ export default {
 			active: 0,
 			confirming: null, // the system action waiting for its typed word
 			lastFocus: null,
+			activeTheme: currentTheme(),
 		}
 	},
 	computed: {
@@ -30,6 +32,10 @@ export default {
 				{ id: 'go-store', group: 'go', label: 'go app store', run: () => this.$EventBus.$emit('casaUI:paletteGo', 'store') },
 				{ id: 'go-settings', group: 'go', label: 'go settings', run: () => this.$EventBus.$emit('casaUI:paletteGo', 'settings') },
 				...apps,
+				...themes.map(t => ({
+					id: `theme-${t.id}`, group: 'theme', label: `theme ${t.label.toLowerCase()}`,
+					hint: t.id === this.activeTheme ? '● current' : '', hintClass: 'ao-ok', run: () => setTheme(t.id, this.$EventBus),
+				})),
 				{ id: 'sys-restart', group: 'system', label: 'restart', danger: true, word: 'restart', power: 'Restart' },
 				{ id: 'sys-shutdown', group: 'system', label: 'shut down', danger: true, word: 'shutdown', power: 'Shutdown' },
 			]
@@ -70,6 +76,7 @@ export default {
 		},
 		show() {
 			this.lastFocus = document.activeElement
+			this.activeTheme = currentTheme()
 			this.open = true
 			this.query = ''
 			this.active = 0

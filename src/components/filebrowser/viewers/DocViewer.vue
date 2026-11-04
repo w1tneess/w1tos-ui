@@ -78,7 +78,7 @@ export default {
 	width: 100%;
 
 	.docx-wrapper {
-		background-color: $white;
+		background-color: var(--surface);
 
 		>section.docx {
 			box-shadow: none;

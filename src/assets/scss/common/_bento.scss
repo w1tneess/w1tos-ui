@@ -237,3 +237,7 @@ img[alt="folder"]:not(.thumb-w):not(.thumb-h) { filter: saturate(0.5) sepia(0.18
 // The modal lives inside the top bar's stacking context, so lift the bar while it is open.
 .top-bar.ao-over-panels { z-index: 1100; }
 .app-icon-frame:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+// Mono themes stay monochrome: icons render in greyscale (app icons regain colour on hover/focus)
+:root[data-theme^="mono"] .app-icon-frame img,
+:root[data-theme^="mono"] img[alt="folder"]:not(.thumb-w):not(.thumb-h) { filter: grayscale(1) contrast(0.95); }

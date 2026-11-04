@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import terminalTheme from '@/config/terminal.theme'
+import { terminalTheme } from '@/utils/theme'
 import qs from 'qs'
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
@@ -133,7 +133,7 @@ export default {
 				fontSize: 13,
 				cursorStyle: 'block',
 				cursorBlink: true, //光标闪烁
-				theme: terminalTheme,
+				theme: terminalTheme(),
 				rows: parseInt(this.rows), //行数
 				cols: parseInt(this.cols), // 不指定行数，自动回车后光标从下一行开始
 				fontFamily: '"JetBrains Mono Variable", monospace',

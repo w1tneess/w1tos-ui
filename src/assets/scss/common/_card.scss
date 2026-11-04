@@ -7,7 +7,7 @@
 .common-card {
 	border-radius: $backDropBorderRadius;
 
-	color: $white;
+	color: var(--bg);
 	position: relative;
 
 	transition: all 0.3s;

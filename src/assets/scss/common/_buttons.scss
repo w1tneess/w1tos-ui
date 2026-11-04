@@ -50,21 +50,23 @@
 
 .button.is-potplayer {
     background-color: var(--warn);
-    color: $black;
+    color: var(--text);
 
     &:hover {
-        background: findDarkColor(var(--warn));
-        color: $white;
+        background: var(--warn);
+        filter: brightness(0.9); // Sass colour functions cannot read a CSS variable
+        color: var(--bg);
     }
 }
 
 .button.is-vlc {
     background-color: var(--warn);
-    color: $white;
+    color: var(--bg);
 
     &:hover {
-        background: findDarkColor(var(--warn));
-        color: $white;
+        background: var(--warn);
+        filter: brightness(0.9); // Sass colour functions cannot read a CSS variable
+        color: var(--bg);
     }
 }
 

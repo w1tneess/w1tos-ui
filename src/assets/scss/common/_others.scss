@@ -202,7 +202,7 @@ button.dropdown-item.is-active {
 	.v-step__header {
 		border-top-left-radius: 10px !important;
 		border-top-right-radius: 10px !important;
-		background-color: $primary-dark !important;
+		background-color: var(--accent-hover) !important;
 	}
 
 	.v-step__content {

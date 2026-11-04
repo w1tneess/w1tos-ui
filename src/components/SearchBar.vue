@@ -73,7 +73,7 @@ export default {
 		}
 
 		&::placeholder {
-			color: $grey-400;
+			color: var(--muted);
 		}
 	}
 
@@ -87,13 +87,13 @@ export default {
 		.icon.is-left {
 			transition: all 0.2s;
 			left: 0;
-			color: $grey-100 !important;
+			color: var(--text) !important;
 		}
 
 		.icon.is-right {
 			transition: all 0.2s;
 			right: -3rem !important;
-			color: $grey-100 !important;
+			color: var(--text) !important;
 		}
 
 		input {

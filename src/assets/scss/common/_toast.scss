@@ -1,7 +1,7 @@
 // Toast
 
 .toast {
-	border: 1px solid $grey-300 !important;
+	border: 1px solid var(--line) !important;
 	padding: 0.75rem 1.25rem;
 	
 	p,
@@ -17,7 +17,7 @@
 	&.is-success,
 	&.is-danger,
 	&.is-warning {
-		background: $white !important;
+		background: var(--surface) !important;
 		color: var(--text);
 		
 		&::before {

@@ -18,7 +18,7 @@ It is not affiliated with or endorsed by IceWhale. "CasaOS" is their name for th
 
 | Area | w1tOS UI |
 |---|---|
-| **Look** | Dusk plum and canyon-peach dark theme everywhere: no wallpaper, no blur. Every colour comes from one token set. A second theme, espresso-gold, is included. |
+| **Look** | Three themes, switchable instantly from Settings or the command palette: **Mono Dark** (default), **Mono Light** and **Royal Charcoal**. No wallpaper, no blur; every colour comes from one token set. |
 | **Login / first run** | Terminal-style prompt (`w1tos login:`), Enter to submit, inline errors |
 | **Dashboard** | Bento grid (12 / 6 / 1 columns) with a status line: `w1t@w1tos · ↓ ↑ rates · clock`. CPU and memory shown as text meters, plus a containers card. |
 | **Command palette** | `Ctrl+K` / `⌘K` to open apps, go to Files / App Store / Settings, or restart / shut down (you type the word to confirm). |
@@ -46,7 +46,8 @@ It is not affiliated with or endorsed by IceWhale. "CasaOS" is their name for th
 |---|---|
 | Production build, unit tests (`pnpm test`), env-leak check | ✅ passes, also in CI |
 | Login, dashboard layout (1400 px, 900 px, 360 px with no horizontal scroll), Files, Settings menu, command palette | ✅ tested against the mock backend |
-| App Store: Featured, categories, list, detail page, install request (same API calls as stock CasaOS), store-source input | ✅ tested against the mock's 12-app catalogue |
+| App Store: Featured, categories, list, detail page, install request (same API calls as stock CasaOS), store-source input | ✅ tested against a temporary catalogue; the shipped mock has an empty store |
+| Theme switching (all three themes: dashboard, Files, App Store, palette) | ✅ tested against the mock |
 | Live stats and network rates (Socket.IO), terminal and logs, installing apps | ⚠️ not tested: needs a real server, because the mock has no socket |
 | Signing in through Cloudflare Access, the deploy script, the server swap script | ⚠️ written, not yet run |
 
@@ -65,7 +66,7 @@ Known gaps:
 
 ```bash
 pnpm install
-pnpm mock        # terminal 1: mock CasaOS API on 127.0.0.1:8090 with sample data
+pnpm mock        # terminal 1: mock CasaOS API on 127.0.0.1:8090 (a clean install: no apps, empty store)
 pnpm dev         # terminal 2: opens the UI; any username and password log in
 ```
 
@@ -137,42 +138,46 @@ module.exports = {
   user: 'w1t',
   host: 'w1tos',         // status line shows w1t@w1tos
   greeting: 'Welcome back',
-  theme: 'plum-peach',   // or 'espresso-gold'
+  theme: 'mono-dark',    // default for new visitors; each viewer can switch in Settings
 };
 ```
 
-Two presets ship: **plum-peach** (default) and **espresso-gold**. Colours live in `scripts/brand.build.js`. It generates the Sass variables (which Bulma needs at compile time), the runtime CSS variables and the
-terminal theme from one preset, and runs automatically before `dev` and `build`. Components use `var(--token)` only.
-There are no hard-coded colours outside the generated files, and CI keeps it that way.
+## Themes
 
-plum-peach tokens:
+| Mono Dark (default) | Mono Light | Royal Charcoal |
+|---|---|---|
+| ![Mono Dark](docs/screenshots/dashboard.jpg) | ![Mono Light](docs/screenshots/theme-mono-light.jpg) | ![Royal Charcoal](docs/screenshots/theme-royal-charcoal.jpg) |
 
-| Token | Value | Use | Contrast |
-|---|---|---|---|
-| `--bg` / `--surface` / `--raised` | `#1A1117` / `#24161F` / `#341F2C` | page, cards, modals | |
-| `--text` / `--text-soft` / `--muted` | `#FAEFE9` / `#E2D5C2` / `#B49BA7` | headings, body, labels | 16.4 / 12.0 / 6.8 : 1 |
-| `--accent` / `--accent-hover` | `#F4A384` / `#F8C1A6` | buttons, focus ring, cursor, meters (gold-to-peach gradient) | 9.2 : 1 |
-| `--cool` | `#8FB3C9` | secondary data (network upload, terminal blue) | 7.8 : 1 |
-| `--burgundy` / `--maroon` | `#7A5063` / `#4A2C3F` | brand mark only (user@host pill, pinned badge) | text on pill 10.8 : 1 |
-| `--ok` / `--warn` / `--err` | `#8CC49A` / `#EECB88` / `#EE6E78` | always paired with `●` / `▲` / `✕` | 8.7 / 11.2 / 5.9 : 1 |
-| `--line-strong` | `#9C7A8B` | input underlines, control edges | 4.9 : 1 |
+Switch in **Settings → Theme** or with `Ctrl+K` → `theme …`. The change applies instantly and is remembered per browser.
+`brand.config.js` only sets the default.
 
-Contrast is measured on `--surface`, except text and accent, which are measured on `--bg`. Every text pair passes WCAG AA, and
-controls pass the 3:1 non-text rule. The accent is far enough from the text (ΔE 40) and from the error colour (ΔE 28) that
-peach never reads as danger. The surfaces come from Obsidian Plum `#4A2C3F` and the text from Baby Blossom `#FAEFE9` and
-Onion White `#E2D5C2`. The accent is Creamy Peach `#F4A384`, and the gold and terracotta come from the canyon palette.
+| Token | Mono Dark | Mono Light | Royal Charcoal | Use |
+|---|---|---|---|---|
+| `--bg` / `--surface` / `--raised` | `#000000` `#0A0A0A` `#171717` | `#F5F5F5` `#FFFFFF` `#FFFFFF` | `#141518` `#1E1F22` `#2A2C30` | page, cards, modals |
+| `--text` / `--text-soft` / `--muted` | `#F0F0F0` `#D4D4D4` `#A3A3A3` | `#0A0A0A` `#262626` `#525252` | `#F0F0F0` `#D4D4D6` `#A3A4A8` | headings, body, labels |
+| `--accent` | `#FAFAFA` | `#171717` | `#9DB4FF` | buttons, focus ring, cursor, meters |
+| `--line` / `--line-strong` | `#262626` / `#737373` | `#E5E5E5` / `#737373` | `#2F3135` / `#7D7F85` | borders / input edges |
+| `--ok` / `--warn` / `--err` | `#4ADE80` `#FBBF24` `#F87171` | `#15803D` `#A16207` `#B91C1C` | `#6EE7A0` `#FCD34D` `#FB8A8A` | always paired with `●` / `▲` / `✕` |
+
+Every theme passes WCAG AA: text is 16 to 18:1, labels at least 5.4:1, status colours at least 4.9:1 and input edges at
+least 4.3:1. The mono themes use greyscale icons (app icons regain colour on hover). The neutrals come from the AAA grey
+scale, Cyberminimalism and Royal Charcoal palettes, and Royal Charcoal adds a soft blue accent.
+
+**How it works.** `scripts/brand.build.js` holds the themes. It writes the runtime CSS variables for each theme (selected by
+`<html data-theme>`), the terminal palettes, and the Sass variables Bulma needs at compile time. Bulma bakes colours in
+when it builds, so those Sass values are unique stand-in colours, and a small PostCSS step in `vue.config.js` rewrites
+each one to its `var(--token)`. Components use tokens only. CI fails on any hard-coded colour outside the generated files.
 
 ## Project layout
 
 ```
 src/config/brand.config.js     name, user@host, theme
-scripts/brand.build.js         palette → Sass + CSS vars + xterm theme
+scripts/brand.build.js         themes → CSS vars per theme, Sass stand-ins, terminal palettes
 src/assets/scss/common/        _theme (global overrides), _bento (dashboard), _prompt (login)
 src/components/palette/        command palette
 src/components/bento/          containers card, text meter
 mock/server.js                 local mock of the CasaOS API
 scripts/deploy.ps1, w1tos-swap deploy and rollback
-design/                        static palette proof and dashboard mockup
 tests/                         node:test unit tests
 ```
 

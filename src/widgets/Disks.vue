@@ -22,8 +22,8 @@
 							</div>
 							<div class="ml-2 is-flex-grow-1 ">
 								<h4 class="title mb-1 mt-0 has-text-left one-line is-align-items-center is-flex">
-									<span v-if="health" class="ao-ok ao-mono">● healthy</span>
-									<span v-else class="ao-err ao-mono">✕ damaged</span>
+									<span v-if="health" class="ao-ok ao-mono is-size-7">● healthy</span>
+									<span v-else class="ao-err ao-mono is-size-7">✕ damaged</span>
 								</h4>
 								<p class="has-text-left is-size-14px disk-info">
 									{{ $t('Used') }}: {{ renderSize(totalUsed) }}<br>
@@ -151,7 +151,7 @@ export default {
 		font-size: 0.875rem;
 		line-height: 1.25rem;
 		font-weight: 400;
-		color: $grey-400;
+		color: var(--muted);
 	}
 }
 </style>

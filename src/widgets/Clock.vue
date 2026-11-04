@@ -77,14 +77,14 @@ export default {
 		font-size: 2rem;
 		font-weight: 600;
 		line-height: 1.125em;
-		color: $grey-100;
+		color: var(--text);
 	}
 
 	.date {
 		font-size: 0.875rem;
 		font-weight: 400;
 		line-height: 1.25rem;
-		color: $grey-400;
+		color: var(--muted);
 	}
 }
 </style>

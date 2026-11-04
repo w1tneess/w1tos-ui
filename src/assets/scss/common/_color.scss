@@ -3,23 +3,23 @@
 }
 
 .has-text-grey-100 {
-	color: $grey-100;
+	color: var(--text); // was light text for the old wallpaper; follows the theme now
 }
 
 .has-text-grey-200 {
-	color: $grey-200;
+	color: var(--text);
 }
 
 .has-text-grey-400 {
-	color: $grey-400;
+	color: var(--muted);
 }
 
 .has-text-grey-600 {
-	color: $grey-600;
+	color: var(--muted);
 }
 
 .has-text-gray-800 {
-	color: $gray-800;
+	color: var(--text-soft);
 }
 
 .has-text-gray-font{
@@ -41,5 +41,5 @@
 }
 
 .has-background-gray-800 {
-	background-color: $gray-800;
+	background-color: var(--raised);
 }

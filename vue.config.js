@@ -13,6 +13,30 @@ pub.BASE_URL = "/"; // the router reads process.env.BASE_URL, which this define 
 
 const target = `http://${process.env.VUE_APP_DEV_IP}:${process.env.VUE_APP_DEV_PORT}`;
 
+// Runtime themes: Bulma bakes colours in at compile time, so the Sass palette uses unique "sentinel" hexes
+// (scripts/brand.build.js) and this PostCSS step rewrites each one to its live var(--token).
+const { sentinels } = require("./scripts/brand.build.js");
+const sentinelToToken = Object.fromEntries(
+	Object.entries(sentinels(require("./src/config/brand.config.js").theme)).map(([token, hex]) => [hex.toLowerCase(), token])
+);
+const hexToRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)).join(",");
+const rgbToToken = Object.fromEntries(Object.entries(sentinelToToken).map(([hex, token]) => [hexToRgb(hex), token]));
+const themeTokens = {
+	postcssPlugin: "w1tos-theme-tokens",
+	Declaration(decl) {
+		if (decl.prop.startsWith("--")) return; // the token definitions themselves
+		const value = decl.value
+			.replace(/#[0-9a-f]{6}\b/gi, (hex) => (sentinelToToken[hex.toLowerCase()] ? `var(--${sentinelToToken[hex.toLowerCase()]})` : hex))
+			.replace(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+)\s*)?\)/gi, (m, r, g, b, a) => {
+				const token = rgbToToken[`${r},${g},${b}`];
+				if (!token) return m;
+				return a === undefined || Number(a) >= 1 ? `var(--${token})` : `color-mix(in srgb, var(--${token}) ${Math.round(a * 100)}%, transparent)`;
+			});
+		if (value !== decl.value) decl.value = value;
+	},
+};
+const autoprefixer = require(require.resolve("autoprefixer", { paths: [path.dirname(require.resolve("@vue/cli-service/package.json"))] }));
+
 module.exports = {
 	publicPath: "/",
 	runtimeCompiler: true,
@@ -21,6 +45,8 @@ module.exports = {
 	pluginOptions: {},
 	css: {
 		loaderOptions: {
+			// Supplying postcss options turns off Vue CLI's default autoprefixer, so it is listed here too
+			postcss: { postcssOptions: { plugins: [themeTokens, autoprefixer] } },
 			sass: {
 				sassOptions: {
 					includePaths: ["./node_modules", "./src/assets"],

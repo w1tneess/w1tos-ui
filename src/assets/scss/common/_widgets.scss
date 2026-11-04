@@ -31,7 +31,7 @@
 		z-index: 4;
 		
 		.widget-title {
-			color: $grey-100;
+			color: var(--text);
 			font-size: 1.125rem;
 			line-height: 1.75rem;
 			font-weight: 500;

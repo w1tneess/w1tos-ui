@@ -100,3 +100,11 @@ body, html { background: var(--bg); color: var(--text-soft); }
 		table tr:nth-child(2n) { background: var(--raised); }
 	}
 }
+
+// Missing app screenshots/thumbnails: the fallback image is transparent, so the slot shows as a quiet theme block
+.featured-app .b-image-wrapper, .app-detial .b-image-wrapper.border-8 {
+	background: var(--inset);
+	border: 1px solid var(--line);
+	border-radius: var(--r-md);
+	overflow: hidden;
+}

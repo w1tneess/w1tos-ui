@@ -22,15 +22,7 @@ function utilization() {
 	};
 }
 
-const apps = [
-	['jellyfin', 'running'], ['immich', 'running'], ['nextcloud', 'running'], ['vaultwarden', 'running'],
-	['home-assistant', 'running'], ['syncthing', 'running'], ['pihole', 'stopped'], ['qbittorrent', 'running'],
-	['portainer', 'running'], ['uptime-kuma', 'running'],
-].map(([name, status], i) => ({
-	name, status, app_type: 'v2app', store_app_id: name, title: { en_us: name },
-	icon: `https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps/${name.replace(/(^|-)\w/g, (m) => m.toUpperCase()).replace(/-/g, '')}/icon.png`,
-	hostname: '', port: String(8100 + i), scheme: 'http', index: '/', image: `${name}:latest`, is_uncontrolled: false,
-}));
+const apps = []; // a clean install: only the built-in Files and App Store tiles
 
 const folder = (path) => {
 	const day = new Date().toISOString();
@@ -43,44 +35,11 @@ const folder = (path) => {
 };
 
 
-// App Store catalogue: real CasaOS-AppStore entries (icons/screenshots from that repo's CDN)
-const CDN = 'https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps';
-const catalogue = [
-	['jellyfin', 'Jellyfin', 'Media', 'The free software media system', 'Jellyfin', true],
-	['immich', 'Immich', 'Gallery', 'Self-hosted photo and video backup', 'Immich', true],
-	['nextcloud', 'Nextcloud', 'Cloud', 'Your files, everywhere', 'Nextcloud', true],
-	['vaultwarden', 'Vaultwarden', 'Utilities', 'Bitwarden-compatible password server', 'Vaultwarden', false],
-	['home-assistant', 'Home Assistant', 'Home Automation', 'Open-source home automation', 'HomeAssistant', true],
-	['syncthing', 'Syncthing', 'Backup', 'Continuous file synchronisation', 'Syncthing', false],
-	['pihole', 'Pi-hole', 'Network', 'Network-wide ad blocking', 'Pi-hole', false],
-	['qbittorrent', 'qBittorrent', 'Downloader', 'Open-source BitTorrent client', 'qBittorrent', false],
-	['portainer', 'Portainer', 'Developer', 'Container management UI', 'Portainer', false],
-	['uptime-kuma', 'Uptime Kuma', 'Utilities', 'Self-hosted monitoring tool', 'UptimeKuma', false],
-	['navidrome', 'Navidrome', 'Media', 'Modern music server and streamer', 'Navidrome', false],
-	['audiobookshelf', 'Audiobookshelf', 'Media', 'Audiobook and podcast server', 'Audiobookshelf', false],
-].map(([id, title, category, tagline, dir, recommend]) => ({
-	id, recommend,
-	info: {
-		title: { en_us: title }, tagline: { en_us: tagline }, category, author: 'CasaOS Team', developer: title,
-		description: { en_us: `${title}: ${tagline.toLowerCase()}. (mock description)` },
-		icon: `${CDN}/${dir}/icon.png`, thumbnail: `${CDN}/${dir}/thumbnail.png`,
-		screenshot_link: [1, 2, 3].map((n) => `${CDN}/${dir}/screenshot-${n}.png`),
-		architectures: ['amd64', 'arm64'], main: id, port_map: '8096', scheme: 'http', index: '/',
-		tips: {},
-	},
-}));
-const installedIds = ['jellyfin', 'immich', 'nextcloud', 'vaultwarden', 'home-assistant', 'syncthing', 'pihole', 'qbittorrent', 'portainer', 'uptime-kuma'];
-const storeList = (q) => {
-	const cat = q.get('category'); const rec = q.get('recommend') === 'true';
-	const items = catalogue.filter((a) => (!cat || a.info.category === cat) && (!rec || a.recommend));
-	return { list: Object.fromEntries(items.map((a) => [a.id, a.info])), installed: installedIds, community: [], recommend: [] };
-};
-const categories = () => {
-	const counts = {};
-	catalogue.forEach((a) => { counts[a.info.category] = (counts[a.info.category] || 0) + 1; });
-	return [{ name: 'All', font: 'apps', count: catalogue.length, description: '' },
-		...Object.entries(counts).map(([name, count]) => ({ name, font: 'apps', count, description: '' }))];
-};
+// App Store: empty, like a server whose store sources are unreachable (no sample apps)
+const catalogue = [];
+const installedIds = [];
+const storeList = () => ({ list: {}, installed: installedIds, community: [], recommend: [] });
+const categories = () => [{ name: 'All', font: 'apps', count: 0, description: '' }];
 const composeOf = (id) => ({
 	name: id,
 	services: { [id]: { image: `mock/${id}:latest`, deploy: { resources: { reservations: { memory: '268435456' } } }, ports: [{ target: 8096, published: '8096', protocol: 'tcp' }] } },

@@ -8,6 +8,7 @@ import messages from '@/assets/lang'
 
 import events from '@/events/events'
 import brand from '@/config/brand.config'
+import { currentTheme, setTheme, themes } from '@/utils/theme'
 
 const systemConfigName = 'system'
 
@@ -25,6 +26,8 @@ export default {
   data() {
     return {
       brand,
+      themes,
+      theme: currentTheme(),
       isMac: /mac/i.test(navigator.platform),
       clock: '',
       clockTimer: 0,
@@ -149,6 +152,7 @@ export default {
   mounted() {
     this.$EventBus.$on('casaUI:paletteGo', this.onPaletteGo)
     this.$EventBus.$on('casaUI:palettePower', this.onPalettePower)
+    this.$EventBus.$on('casaUI:themeChanged', this.onThemeChanged)
     this.tick()
     this.clockTimer = setInterval(this.tick, 10000)
     this.checkVersion()
@@ -160,10 +164,17 @@ export default {
   beforeDestroy() {
     this.$EventBus.$off('casaUI:paletteGo', this.onPaletteGo)
     this.$EventBus.$off('casaUI:palettePower', this.onPalettePower)
+    this.$EventBus.$off('casaUI:themeChanged', this.onThemeChanged)
     clearInterval(this.clockTimer)
   },
 
   methods: {
+    pickTheme(id) {
+      setTheme(id, this.$EventBus)
+    },
+    onThemeChanged(id) {
+      this.theme = id
+    },
     onPaletteGo(target) {
       if (target === 'settings')
         this.$refs.settingsDrop.toggle()
@@ -598,6 +609,24 @@ export default {
             </div>
           </div>
           <!-- Search Engine End -->
+
+          <!-- Theme Start -->
+          <div class="is-flex is-align-items-center mb-1 _is-large _box hover-effect _is-radius pr-2 mr-4 ml-4">
+            <div class="is-flex is-align-items-center is-flex-grow-1 _is-normal">
+              <b-icon class="mr-1 ml-2" icon="wallpaper-outline" pack="casa" size="is-20" />
+              Theme
+            </div>
+            <div>
+              <b-field>
+                <b-select v-model="theme" aria-label="Theme" class="set-select" size="is-small" @input="pickTheme">
+                  <option v-for="item in themes" :key="item.id" :value="item.id">
+                    {{ item.label }}
+                  </option>
+                </b-select>
+              </b-field>
+            </div>
+          </div>
+          <!-- Theme End -->
 
           <!-- WebUI Port Start -->
           <div

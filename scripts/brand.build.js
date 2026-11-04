@@ -1,65 +1,116 @@
-// Generates Sass hex vars (Bulma needs literals at compile time), runtime CSS vars and the xterm theme.
+// One source for every theme. Writes:
+//   _brand.generated.scss   Sass vars for Bulma (compile-time). Values are "sentinels": the default theme's colours,
+//                           nudged so each token has a unique hex that vue.config.js rewrites to var(--token).
+//   _tokens.generated.scss  runtime CSS vars for every theme, selected by <html data-theme="…">
+//   theme.generated.js      theme list, default theme and the xterm palette per theme
 const fs = require('fs');
 const path = require('path');
-const brand = require('../src/config/brand.config.js');
 
-const presets = {
-	'espresso-gold': {
-		bg: '#0E0A07', surface: '#17110C', raised: '#291C0E', inset: '#120D09',
-		line: '#3A2818', 'line-active': '#6E473B', 'line-strong': '#8A6A58',
-		text: '#F2E5C6', 'text-soft': '#E1D4C2', muted: '#A78D78',
-		accent: '#D9A441', 'accent-hover': '#F2D9A0',
-		burgundy: '#75162D', maroon: '#560B18',
-		ok: '#68B684', warn: '#E8894A', err: '#D9535E',
-		// not Sass colours: runtime only
-		'line-glow': 'rgba(242, 217, 160, 0.12)', 'accent-tint': 'rgba(217, 164, 65, 0.10)',
+// Contrast (WCAG 2.x, checked with every change): text >= 4.5:1 on surface and raised, controls >= 3:1.
+const themes = {
+	'mono-dark': {
+		label: 'Mono Dark', scheme: 'dark',
+		bg: '#000000', surface: '#0A0A0A', raised: '#171717', inset: '#050505',
+		line: '#262626', 'line-active': '#383838', 'line-strong': '#737373',
+		text: '#F0F0F0', 'text-soft': '#D4D4D4', muted: '#A3A3A3',
+		accent: '#FAFAFA', 'accent-hover': '#D4D4D4',
+		burgundy: '#383838', maroon: '#1A1A1A',
+		ok: '#4ADE80', warn: '#FBBF24', err: '#F87171', cool: '#8A8A8A',
+		'line-glow': 'rgba(255, 255, 255, 0.05)', 'accent-tint': 'rgba(250, 250, 250, 0.08)',
+		'accent-gradient': 'linear-gradient(90deg, #A3A3A3, #FAFAFA)',
 		terminal: {
-			background: '#0E0A07', foreground: '#F2E5C6', cursor: '#D9A441', cursorAccent: '#0E0A07',
-			selection: 'rgba(217, 164, 65, 0.28)', // xterm v4 key
-			black: '#17110C', red: '#D9535E', green: '#68B684', yellow: '#E5C07B',
-			blue: '#8CA8BE', magenta: '#B87D95', cyan: '#7FA99B', white: '#E1D4C2',
-			brightBlack: '#8A6A58', brightRed: '#E67A83', brightGreen: '#88C9A1', brightYellow: '#F0D58A',
-			brightBlue: '#ADC3D4', brightMagenta: '#CFA0B3', brightCyan: '#9BC0B4', brightWhite: '#FAF3E6',
+			background: '#000000', foreground: '#F0F0F0', cursor: '#FAFAFA', cursorAccent: '#000000',
+			selection: 'rgba(250, 250, 250, 0.22)',
+			black: '#171717', red: '#F87171', green: '#4ADE80', yellow: '#FBBF24',
+			blue: '#93A8C8', magenta: '#C4A7D7', cyan: '#7DD3C8', white: '#D4D4D4',
+			brightBlack: '#737373', brightRed: '#FCA5A5', brightGreen: '#86EFAC', brightYellow: '#FDE68A',
+			brightBlue: '#BFCDE2', brightMagenta: '#DDC8EA', brightCyan: '#A7E8DF', brightWhite: '#FFFFFF',
 		},
 	},
-
-	// Dusk plum + canyon peach. Every text pair >= 4.5:1, inputs >= 3:1 (WCAG 2.x); accent dE 40 from text, 28 from err.
-	'plum-peach': {
-		bg: '#1A1117', surface: '#24161F', raised: '#341F2C', inset: '#150D12',
-		line: '#3E2836', 'line-active': '#7A5063', 'line-strong': '#9C7A8B',
-		text: '#FAEFE9', 'text-soft': '#E2D5C2', muted: '#B49BA7',
-		accent: '#F4A384', 'accent-hover': '#F8C1A6',
-		burgundy: '#7A5063', maroon: '#4A2C3F',
-		ok: '#8CC49A', warn: '#EECB88', err: '#EE6E78', cool: '#8FB3C9',
-		'line-glow': 'rgba(250, 239, 233, 0.07)', 'accent-tint': 'rgba(244, 163, 132, 0.10)',
-		'accent-gradient': 'linear-gradient(90deg, #EECB88, #F4A384)',
+	'mono-light': {
+		label: 'Mono Light', scheme: 'light',
+		bg: '#F5F5F5', surface: '#FFFFFF', raised: '#FFFFFF', inset: '#FAFAFA',
+		line: '#E5E5E5', 'line-active': '#D4D4D4', 'line-strong': '#737373',
+		text: '#0A0A0A', 'text-soft': '#262626', muted: '#525252',
+		accent: '#171717', 'accent-hover': '#404040',
+		burgundy: '#A3A3A3', maroon: '#E5E5E5',
+		ok: '#15803D', warn: '#A16207', err: '#B91C1C', cool: '#525252',
+		'line-glow': 'rgba(255, 255, 255, 0.8)', 'accent-tint': 'rgba(23, 23, 23, 0.06)',
+		'accent-gradient': 'linear-gradient(90deg, #525252, #171717)',
 		terminal: {
-			background: '#1A1117', foreground: '#FAEFE9', cursor: '#F4A384', cursorAccent: '#1A1117',
-			selection: 'rgba(244, 163, 132, 0.28)',
-			black: '#24161F', red: '#EE6E78', green: '#8CC49A', yellow: '#EECB88',
-			blue: '#8FB3C9', magenta: '#CFA2C4', cyan: '#86C2BD', white: '#E2D5C2',
-			brightBlack: '#9C7A8B', brightRed: '#F4949C', brightGreen: '#A9D6B4', brightYellow: '#F6DDAD',
-			brightBlue: '#AECAD9', brightMagenta: '#DFBBD6', brightCyan: '#A7D6D1', brightWhite: '#FAEFE9',
+			background: '#FFFFFF', foreground: '#171717', cursor: '#171717', cursorAccent: '#FFFFFF',
+			selection: 'rgba(23, 23, 23, 0.15)',
+			black: '#171717', red: '#B91C1C', green: '#15803D', yellow: '#A16207',
+			blue: '#1D4ED8', magenta: '#7E22CE', cyan: '#0E7490', white: '#525252',
+			brightBlack: '#525252', brightRed: '#991B1B', brightGreen: '#166534', brightYellow: '#854D0E',
+			brightBlue: '#1E40AF', brightMagenta: '#6B21A8', brightCyan: '#155E75', brightWhite: '#262626',
+		},
+	},
+	'royal-charcoal': {
+		label: 'Royal Charcoal', scheme: 'dark',
+		bg: '#141518', surface: '#1E1F22', raised: '#2A2C30', inset: '#18191C',
+		line: '#2F3135', 'line-active': '#47484C', 'line-strong': '#7D7F85',
+		text: '#F0F0F0', 'text-soft': '#D4D4D6', muted: '#A3A4A8',
+		accent: '#9DB4FF', 'accent-hover': '#C2D0FF',
+		burgundy: '#4C4E51', maroon: '#26282C',
+		ok: '#6EE7A0', warn: '#FCD34D', err: '#FB8A8A', cool: '#9AA3B5',
+		'line-glow': 'rgba(255, 255, 255, 0.05)', 'accent-tint': 'rgba(157, 180, 255, 0.10)',
+		'accent-gradient': 'linear-gradient(90deg, #7D7F85, #9DB4FF)',
+		terminal: {
+			background: '#141518', foreground: '#F0F0F0', cursor: '#9DB4FF', cursorAccent: '#141518',
+			selection: 'rgba(157, 180, 255, 0.25)',
+			black: '#1E1F22', red: '#FB8A8A', green: '#6EE7A0', yellow: '#FCD34D',
+			blue: '#9DB4FF', magenta: '#D2A8FF', cyan: '#7DD3E0', white: '#D4D4D6',
+			brightBlack: '#7D7F85', brightRed: '#FCB1B1', brightGreen: '#A7F3C9', brightYellow: '#FDE68A',
+			brightBlue: '#C2D0FF', brightMagenta: '#E4CCFF', brightCyan: '#A9E5EE', brightWhite: '#FFFFFF',
 		},
 	},
 };
 
-const p = presets[brand.theme];
-if (!p) throw new Error(`Unknown theme "${brand.theme}"`);
 const sassKeys = ['bg', 'surface', 'raised', 'inset', 'line', 'line-active', 'line-strong', 'text', 'text-soft', 'muted',
 	'accent', 'accent-hover', 'burgundy', 'maroon', 'ok', 'warn', 'err', 'cool'];
-const hdr = '// Generated by scripts/brand.build.js. Do not edit.\n';
-const dir = path.join(__dirname, '../src/assets/scss/common');
-
-// Sass: injected into every SCSS block, so variables only, no CSS output.
-fs.writeFileSync(path.join(dir, '_brand.generated.scss'),
-	hdr + sassKeys.map((k) => `$ao-${k}: ${p[k]};`).join('\n') + '\n');
-
-// Runtime vars: imported once from app.scss.
 const cssKeys = [...sassKeys, 'line-glow', 'accent-tint', 'accent-gradient'];
-fs.writeFileSync(path.join(dir, '_tokens.generated.scss'),
-	hdr + ':root {\n' + cssKeys.map((k) => `  --${k}: ${p[k]};`).join('\n') + '\n}\n');
 
-fs.writeFileSync(path.join(__dirname, '../src/config/terminal.theme.js'),
-	hdr + `export default ${JSON.stringify(p.terminal, null, 2)}\n`);
-console.log(`brand: ${brand.theme}`);
+// Unique hex per token, close to the default theme so Bulma's derived shades still look right.
+function sentinels(defaultTheme) {
+	const used = new Set();
+	const map = {};
+	for (const key of sassKeys) {
+		const [r, g, b] = [1, 3, 5].map((i) => parseInt(themes[defaultTheme][key].slice(i, i + 2), 16));
+		for (let d = 1; ; d++) {
+			const nb = b + d <= 255 ? b + d : b - d;
+			const hex = '#' + [r, g, nb].map((v) => v.toString(16).padStart(2, '0')).join('').toUpperCase();
+			if (!used.has(hex)) { used.add(hex); map[key] = hex; break; }
+		}
+	}
+	return map;
+}
+
+module.exports = { themes, sassKeys, sentinels };
+
+if (require.main === module) {
+	const brand = require('../src/config/brand.config.js');
+	const def = brand.theme;
+	if (!themes[def]) throw new Error(`Unknown theme "${def}". Choose one of: ${Object.keys(themes).join(', ')}`);
+	const hdr = '// Generated by scripts/brand.build.js. Do not edit.\n';
+	const dir = path.join(__dirname, '../src/assets/scss/common');
+	const s = sentinels(def);
+
+	// Sass: injected into every SCSS block, so variables only, no CSS output.
+	fs.writeFileSync(path.join(dir, '_brand.generated.scss'),
+		hdr + sassKeys.map((k) => `$ao-${k}: ${s[k]};`).join('\n') + '\n');
+
+	const block = (t) => cssKeys.map((k) => `  --${k}: ${themes[t][k]};`).join('\n') + `\n  color-scheme: ${themes[t].scheme};`;
+	const css = Object.keys(themes).map((t) =>
+		`${t === def ? ':root, ' : ''}:root[data-theme="${t}"] {\n${block(t)}\n}`).join('\n\n');
+	fs.writeFileSync(path.join(dir, '_tokens.generated.scss'), hdr + css + '\n');
+
+	const meta = {
+		defaultTheme: def,
+		themes: Object.entries(themes).map(([id, t]) => ({ id, label: t.label, scheme: t.scheme })),
+		terminal: Object.fromEntries(Object.entries(themes).map(([id, t]) => [id, t.terminal])),
+	};
+	fs.writeFileSync(path.join(__dirname, '../src/config/theme.generated.js'),
+		hdr + `export default ${JSON.stringify(meta, null, 2)}\n`);
+	console.log(`brand: ${Object.keys(themes).length} themes, default ${def}`);
+}

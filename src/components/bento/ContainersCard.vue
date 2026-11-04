@@ -21,7 +21,7 @@ export default {
 		<h2 class="ao-card__title">containers</h2>
 		<p v-if="$store.state.appList === null" class="ao-sub" role="status">loading…</p>
 		<div v-else class="ao-row">
-			<span class="ao-big"><span class="ao-ok">●</span> {{ running.length }} <span class="ao-sub">running</span></span>
+			<span class="ao-big"><span :class="running.length ? 'ao-ok' : 'ao-sub'">●</span> {{ running.length }} <span class="ao-sub">running</span></span>
 			<span v-if="stopped" class="ao-err ao-mono">✕ {{ stopped }} stopped</span>
 		</div>
 		<p v-if="$store.state.appList && running.length" class="ao-sub ao-one-line mt-2">

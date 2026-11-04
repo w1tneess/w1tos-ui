@@ -261,7 +261,7 @@ $link-focus-border: $primary;
 
 
 // BackDrop 
-$backDropColor: rgba(53, 54, 58, 0.4);
+$backDropColor: $ao-surface; // was translucent glass over the wallpaper
 $backDropBlur: blur(5px) saturate(180%);
 $backDropBorder: none;
 $backDropBorderRadius: 10px;

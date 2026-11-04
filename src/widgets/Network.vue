@@ -50,6 +50,7 @@
 <script>
 // import VueApexCharts from 'vue-apexcharts'
 import { mixin } from '@/mixins/mixin';
+import { token } from '@/utils/theme';
 
 export default {
 	mixins: [mixin],
@@ -91,7 +92,7 @@ export default {
 					enabled: false,
 				},
 				// series 0 = up (cool), 1 = down (accent); read from the runtime tokens
-				colors: ['--cool', '--accent'].map(v => getComputedStyle(document.documentElement).getPropertyValue(v).trim()),
+				colors: [token('cool'), token('accent')],
 				stroke: {
 					curve: 'smooth',
 					width: 1,
@@ -135,7 +136,7 @@ export default {
 						minHeight: undefined,
 						maxHeight: 120,
 						style: {
-							colors: getComputedStyle(document.documentElement).getPropertyValue('--muted').trim(),
+							colors: token('muted'),
 							fontSize: '10px',
 							fontWeight: 400,
 							cssClass: 'apexcharts-xaxis-label',
@@ -171,7 +172,17 @@ export default {
 		}
 	},
 
+	mounted() {
+		this.$EventBus.$on('casaUI:themeChanged', this.recolor)
+	},
+	beforeDestroy() {
+		this.$EventBus.$off('casaUI:themeChanged', this.recolor)
+	},
 	methods: {
+		// apexcharts takes literal colours, so re-read the tokens when the theme changes
+		recolor() {
+			this.$refs.chart?.updateOptions({ colors: [token('cool'), token('accent')], yaxis: { labels: { style: { colors: token('muted') } } } })
+		},
 		buildDatas(data) {
 			if (data.length == 0) {
 				return
@@ -284,7 +295,7 @@ export default {
 			z-index: 200;
 			outline: none;
 			border: 0;
-			color: $grey-100;
+			color: var(--text);
 
 			&:focus:not(:active) {
 				box-shadow: 0 0 0 0 !important;
@@ -308,7 +319,7 @@ export default {
 				font-size: 1.25rem !important;
 				height: 1.5rem;
 				line-height: 1.5rem;
-				color: $grey-100;
+				color: var(--text);
 
 				&:last-child:not(:first-child) {
 					margin-right: 0;

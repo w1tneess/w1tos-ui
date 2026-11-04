@@ -19,6 +19,9 @@ import VueDOMPurifyHTML from 'vue-dompurify-html'
 import '@fontsource-variable/inter'
 import '@fontsource-variable/jetbrains-mono'
 import '@/assets/scss/app.scss'
+import { applySavedTheme } from '@/utils/theme'
+
+applySavedTheme()
 
 const io = require("socket.io-client");
 
