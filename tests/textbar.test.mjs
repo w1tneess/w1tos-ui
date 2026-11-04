@@ -1,4 +1,4 @@
-// Run: node --test tests/
+// Run: pnpm test
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
