@@ -33,7 +33,7 @@ const state = {
   operateObject: null,
   currentPath: '',
   // Shared by the app grid and the containers card
-  appList: [],
+  appList: null, // null until AppSection's first fetch
   isViewGird: true,
 
   // Samba and nfs data

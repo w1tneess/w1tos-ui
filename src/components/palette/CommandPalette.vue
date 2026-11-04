@@ -3,7 +3,7 @@ import { fuzzyFilter } from '@/utils/fuzzy'
 
 // Actions are sent over $EventBus; the components that already own each flow
 // (AppCard, Home, AppSection, TopBar) carry them out, so nothing is duplicated here.
-const GROUPS = ['apps', 'go', 'system']
+const GROUPS = ['go', 'apps', 'system']
 
 export default {
 	name: 'CommandPalette',
@@ -18,7 +18,7 @@ export default {
 	},
 	computed: {
 		items() {
-			const apps = this.$store.state.appList
+			const apps = (this.$store.state.appList || [])
 				.filter(app => app.app_type !== 'system')
 				.map(app => ({
 					id: `app-${app.name}`, group: 'apps', label: `open ${app.name}`,
@@ -26,10 +26,10 @@ export default {
 					hintClass: app.status === 'running' ? 'ao-ok' : app.status === 'stopped' ? 'ao-err' : 'ao-warn', run: () => this.$EventBus.$emit('casaUI:paletteOpenApp', app.name),
 				}))
 			return [
-				...apps,
 				{ id: 'go-files', group: 'go', label: 'go files', run: () => this.$EventBus.$emit('casaUI:paletteGo', 'files') },
 				{ id: 'go-store', group: 'go', label: 'go app store', run: () => this.$EventBus.$emit('casaUI:paletteGo', 'store') },
 				{ id: 'go-settings', group: 'go', label: 'go settings', run: () => this.$EventBus.$emit('casaUI:paletteGo', 'settings') },
+				...apps,
 				{ id: 'sys-restart', group: 'system', label: 'restart', danger: true, word: 'restart', power: 'Restart' },
 				{ id: 'sys-shutdown', group: 'system', label: 'shut down', danger: true, word: 'shutdown', power: 'Shutdown' },
 			]
@@ -242,6 +242,8 @@ export default {
 		display: flex;
 		justify-content: space-between;
 		gap: 12px;
+		min-height: 32px;
+		align-items: center;
 		padding: 6px 14px;
 		color: var(--text-soft);
 		cursor: pointer;

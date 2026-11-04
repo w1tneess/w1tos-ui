@@ -22,8 +22,8 @@
 							</div>
 							<div class="ml-2 is-flex-grow-1 ">
 								<h4 class="title mb-1 mt-0 has-text-left one-line is-align-items-center is-flex">
-									<b-tag v-if="health" type="is-success">{{ $t('Healthy') }}</b-tag>
-									<b-tag v-else type="is-danger">{{ $t('Damage') }}</b-tag>
+									<span v-if="health" class="ao-ok ao-mono">● healthy</span>
+									<span v-else class="ao-err ao-mono">✕ damaged</span>
 								</h4>
 								<p class="has-text-left is-size-14px disk-info">
 									{{ $t('Used') }}: {{ renderSize(totalUsed) }}<br>

@@ -812,7 +812,10 @@ export default {
       >
         <div class="has-text-centered is-flex is-justify-content-center is-flex-direction-column pt-5 pb-3px img-c">
           <div class="is-flex is-justify-content-center">
-            <div class="is-relative app-icon-frame">
+            <div
+              :aria-label="`Open ${i18n(item.title)}`" class="is-relative app-icon-frame" role="button" tabindex="0"
+              @keydown.enter.prevent="openApp(item)" @keydown.space.prevent="openApp(item)"
+            >
               <span v-if="item.app_type === 'system'" aria-label="pinned" class="ao-pin" />
               <b-image
                 :class="dotClass(item.status, isLoading)" :src="item.icon"

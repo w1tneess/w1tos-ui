@@ -28,7 +28,7 @@ export default {
       isMac: /mac/i.test(navigator.platform),
       clock: '',
       clockTimer: 0,
-      net: { down: 0, up: 0, last: null },
+      net: { down: 0, up: 0, last: null, ready: false },
       timer: 0,
       // User
       userInfo: this.$store.state.user,
@@ -467,6 +467,7 @@ export default {
       if (last && now.time > last.time) {
         this.net.down = Math.max(0, (now.recv - last.recv) / (now.time - last.time))
         this.net.up = Math.max(0, (now.sent - last.sent) / (now.time - last.time))
+        this.net.ready = true
       }
       this.net.last = now
     },
@@ -475,13 +476,13 @@ export default {
 </script>
 
 <template>
-  <div class="navbar top-bar is-flex is-align-items-center _fixed-height">
+  <div :class="{ 'ao-over-panels': showPower }" class="navbar top-bar is-flex is-align-items-center _fixed-height">
     <div class="navbar-brand ml-4 _fixed-height">
       <!-- Status Line Start -->
       <div class="ao-status">
         <span class="ao-status__wordmark">{{ brand.wordmark }}</span>
         <span class="ao-pill ao-hide-sm">{{ brand.user }}@{{ brand.host }}</span>
-        <span class="ao-hide-sm ao-num" aria-label="Network throughput">↓{{ rate(net.down) }} ↑{{ rate(net.up) }}</span>
+        <span class="ao-hide-sm ao-num" aria-label="Network throughput"><template v-if="net.ready">↓{{ rate(net.down) }} ↑{{ rate(net.up) }}</template><template v-else>↓— ↑—</template></span>
         <span class="ao-num">{{ clock }}</span>
         <button aria-label="Open command palette" class="ao-kbd ao-hide-sm" type="button" @click="$EventBus.$emit('casaUI:paletteToggle')">
           {{ isMac ? '⌘K' : 'Ctrl K' }}
@@ -751,7 +752,7 @@ export default {
       </div>
     </div>
 
-    <b-modal v-model="showPower" :can-cancel="false" class="_modal" scroll="clip" width="20rem">
+    <b-modal v-model="showPower" :can-cancel="false" class="_modal ao-power-modal" scroll="clip" width="20rem">
       <b-message @close="resetPower">
         <template #header>
           {{ $t(showPowerTitle) }}

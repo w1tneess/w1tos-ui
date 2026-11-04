@@ -19,6 +19,8 @@
 	min-height: 44px;
 
 	.navbar-brand { flex: 1; margin-left: 0 !important; padding: 0 12px; }
+	// Fitts: every status-line control gets a 44px-wide hit area
+	.navbar-brand > div:not(.ao-status) { min-width: 44px; justify-content: center; }
 	.navbar-menu { display: none; } // empty; it would take the space the brand needs
 	.picon, .icon { color: var(--text-soft); }
 	.navbar-item:hover .picon { color: var(--accent); }
@@ -180,6 +182,9 @@
 		.app-icon-frame { border-color: var(--accent); box-shadow: 0 0 0 1px var(--line-glow); }
 		.app-icon-frame img { filter: none; }
 	}
+
+	// Touch screens have no hover: keep the menu visible there
+	@media (hover: none) { .action-btn { opacity: 1; } }
 }
 
 .app-icon-frame {
@@ -217,12 +222,18 @@
 img[alt="folder"]:not(.thumb-w):not(.thumb-h) { filter: saturate(0.5) sepia(0.18) contrast(0.94) brightness(0.93); }
 
 .ao-kbd {
+	min-height: 28px; // Fitts: a real target, not a 16px label
 	background: none;
 	border: 1px solid var(--line-strong);
 	border-radius: var(--r-sm);
 	color: var(--text-soft);
 	font: 11px $family-monospace;
-	padding: 0 6px;
+	padding: 0 10px;
 	cursor: pointer;
 	&:hover { border-color: var(--accent); color: var(--accent-hover); }
 }
+
+// Peak-end: restart/shutdown progress sits above any open panel (Files, App Store).
+// The modal lives inside the top bar's stacking context, so lift the bar while it is open.
+.top-bar.ao-over-panels { z-index: 1100; }
+.app-icon-frame:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }

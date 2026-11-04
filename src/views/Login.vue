@@ -43,14 +43,14 @@ export default {
 
 	methods: {
 		async login() {
-			if (!this.username || !this.password) {
+			if (!this.username.trim() || !this.password) {
 				this.message = this.$t('Username and password are required');
 				return;
 			}
 			this.busy = true;
 			this.message = '';
 			try {
-				const userRes = await this.$api.users.login(this.username, this.password)
+				const userRes = await this.$api.users.login(this.username.trim(), this.password)
 				localStorage.setItem("access_token", userRes.data.data.token.access_token);
 				localStorage.setItem("refresh_token", userRes.data.data.token.refresh_token);
 				localStorage.setItem("expires_at", userRes.data.data.token.expires_at);
