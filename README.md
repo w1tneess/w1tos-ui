@@ -1,6 +1,6 @@
 # w1tOS UI
 
-A dark, keyboard-first web interface for a home server running [CasaOS](https://github.com/IceWhaleTech/CasaOS).
+A minimal, keyboard-first web interface for a home server running [CasaOS](https://github.com/IceWhaleTech/CasaOS).
 It replaces only the web UI. The CasaOS backend, its APIs, Docker and your apps stay exactly as they are.
 
 ![Dashboard](docs/screenshots/dashboard.jpg)
@@ -13,6 +13,23 @@ w1tOS UI is an independent fork of [IceWhaleTech/CasaOS-UI](https://github.com/I
 It is not affiliated with or endorsed by IceWhale. "CasaOS" is their name for their product.
 
 ---
+
+## Why this exists
+
+CasaOS is a good home-server backend, but its stock UI is built around wallpapers, blur, promos and a news feed, and its
+build leaks the build machine's environment into the bundle. w1tOS keeps the backend and replaces only what you look at
+and type into:
+
+- **Calm.** Flat surfaces, three restrained themes, no wallpaper, no marketing. Status uses words and glyphs, not colour alone.
+- **Fast to drive.** Everything common is one `Ctrl+K` away, and the layout follows the [Laws of UX](https://lawsofux.com)
+  (large targets, short choice lists, typed confirmation for destructive actions).
+- **Private.** No telemetry, no third-party feeds, nothing from the build machine in the shipped files.
+- **Honest.** Nothing fake on screen: no sample apps, no placeholder images, no invented numbers. A fresh server looks empty.
+- **Drop-in.** Static files that replace `/var/lib/casaos/www/`, with one-command rollback to the stock UI.
+
+**Not a goal:** w1tOS is not an operating system or a backend fork. It does not change CasaOS's API, apps, storage or
+Docker handling, and it does not add server features. The name is the interface's name; the OS underneath is whatever
+your server already runs CasaOS on. Only English is shipped.
 
 ## What's different from the stock CasaOS UI
 
@@ -51,11 +68,11 @@ It is not affiliated with or endorsed by IceWhale. "CasaOS" is their name for th
 | Live stats and network rates (Socket.IO), terminal and logs, installing apps | ⚠️ not tested: needs a real server, because the mock has no socket |
 | Signing in through Cloudflare Access, the deploy script, the server swap script | ⚠️ written, not yet run |
 
-Known gaps:
-- Restarting from the palette while Files is open shows the "Restarting" box behind Files.
-- The palette has no "logs / terminal for an app" action yet.
-- Favicons and home-screen icons are still the stock images.
-- `color-mix()` needs a 2023-or-newer browser.
+Known gaps and next steps, in order:
+1. Run against a real CasaOS v0.4.5 server: live stats, terminal, logs, installs, then the deploy and swap scripts.
+2. Favicons and home-screen icons are still the stock images.
+3. The palette has no "logs / terminal for an app" action yet.
+4. `color-mix()` needs a 2023-or-newer browser.
 
 ## Requirements
 
@@ -173,13 +190,20 @@ each one to its `var(--token)`. Components use tokens only. CI fails on any hard
 ```
 src/config/brand.config.js     name, user@host, theme
 scripts/brand.build.js         themes → CSS vars per theme, Sass stand-ins, terminal palettes
+src/utils/theme.js             apply, switch and remember the theme at runtime
+vue.config.js                  env whitelist, dev proxy, PostCSS stand-in → var(--token) rewrite
 src/assets/scss/common/        _theme (global overrides), _bento (dashboard), _prompt (login)
 src/components/palette/        command palette
 src/components/bento/          containers card, text meter
 mock/server.js                 local mock of the CasaOS API
 scripts/deploy.ps1, w1tos-swap deploy and rollback
-tests/                         node:test unit tests
+tests/                         node:test: theme contrast (WCAG AA), tokens, fuzzy search, text meter
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Report security problems privately through a
+[security advisory](https://github.com/w1tneess/w1tos-ui/security/advisories/new).
 
 ## License
 

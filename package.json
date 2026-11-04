@@ -2,6 +2,12 @@
   "name": "w1tos-ui",
   "version": "v0.4.5",
   "private": true,
+  "description": "w1tOS: a minimal, keyboard-first web UI for CasaOS home servers (fork of CasaOS-UI)",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/w1tneess/w1tos-ui.git"
+  },
   "scripts": {
     "brand": "node scripts/brand.build.js",
     "dev": "pnpm brand && vue-cli-service serve --mode dev",
