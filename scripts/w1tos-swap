@@ -6,7 +6,8 @@ case "${1:-}" in
     [ -d "$WWW.stock" ] || cp -a "$WWW" "$WWW.stock"
     rm -rf "$WWW.new" && mkdir "$WWW.new"
     tar --no-same-owner -xzf "$2" -C "$WWW.new"
-    chmod -R a+rX "$WWW.new"
+    # Archives made on Windows carry 0777 dirs: strip group/other write
+    chmod -R u+rwX,go+rX,go-w "$WWW.new"
     chown -R root:root "$WWW.new"
     [ -f "$WWW.new/index.html" ] || { echo "no index.html in upload; aborting"; exit 1; }
     rm -f "$2"
