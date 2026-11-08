@@ -68,6 +68,9 @@ export default {
 				let data = res.data.data
 				let replaceData = data.replace(/\n(.{8})/gu, '\n');
 				this.logData = replaceData.substring(8, replaceData.length - 1);
+			}).catch(err => {
+				// Keep the last logs; the next poll retries (e.g. while CasaOS restarts)
+				console.log('$api.sys.getLogs', err)
 			})
 		},
 		onInput(e) {
