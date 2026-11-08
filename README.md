@@ -5,8 +5,8 @@ It replaces only the web UI. The CasaOS backend, its APIs, Docker and your apps 
 
 ![Dashboard](docs/screenshots/dashboard.jpg)
 
-> **Status: early, single-maintainer project.** Everything below marked *tested* was checked in a browser against
-> the bundled mock backend. It has **not yet been run against a real CasaOS server**, so expect rough edges there.
+> **Status: early, single-maintainer project.** It has been run against one real CasaOS **v0.4.15** server through the
+> dev proxy, and against the bundled mock. It has **not yet been deployed onto a server**, so expect rough edges there.
 > See [What is and isn't tested](#what-is-and-isnt-tested).
 
 w1tOS UI is an independent fork of [IceWhaleTech/CasaOS-UI](https://github.com/IceWhaleTech/CasaOS-UI) (Apache-2.0).
@@ -65,18 +65,19 @@ your server already runs CasaOS on. Only English is shipped.
 | Login, dashboard layout (1400 px, 900 px, 360 px with no horizontal scroll), Files, Settings menu, command palette | ✅ tested against the mock backend |
 | App Store: Featured, categories, list, detail page, install request (same API calls as stock CasaOS), store-source input | ✅ tested against a temporary catalogue; the shipped mock has an empty store |
 | Theme switching (all three themes: dashboard, Files, App Store, palette) | ✅ tested against the mock |
-| Live stats and network rates (Socket.IO), terminal and logs, installing apps | ⚠️ not tested: needs a real server, because the mock has no socket |
+| On a real CasaOS v0.4.15 server: first-run account setup, login, live CPU / memory / network (Socket.IO), storage, containers card (including legacy apps), app settings, terminal, logs, Files, App Store catalogue | ✅ tested through `pnpm dev` |
+| Installing or uninstalling an app on a real server | ⚠️ not tested yet |
 | Signing in through Cloudflare Access, the deploy script, the server swap script | ⚠️ written, not yet run |
 
 Known gaps and next steps, in order:
-1. Run against a real CasaOS v0.4.5 server: live stats, terminal, logs, installs, then the deploy and swap scripts.
+1. Deploy onto the server with the deploy and swap scripts, then test an app install there.
 2. Favicons and home-screen icons are still the stock images.
 3. The palette has no "logs / terminal for an app" action yet.
 4. `color-mix()` needs a 2023-or-newer browser.
 
 ## Requirements
 
-- A server running CasaOS. This UI is built from CasaOS-UI **v0.4.5** and expects that version's API; other versions may differ.
+- A server running CasaOS. This UI is built from CasaOS-UI **v0.4.5** and expects that version's API. Tested working against v0.4.15; other versions may differ.
 - To build: Node 22 LTS and pnpm 9.0.6 (`corepack enable` provides it)
 
 ## Try it locally, without a server

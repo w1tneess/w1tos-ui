@@ -1,6 +1,9 @@
 <script>
+import { ice_i18n } from '@/mixins/base/common-i18n'
+
 export default {
 	name: 'ContainersCard',
+	methods: { ice_i18n },
 	computed: {
 		// System tiles (Files, App Store) are not containers
 		containers() {
@@ -25,7 +28,7 @@ export default {
 			<span v-if="stopped" class="ao-err ao-mono">✕ {{ stopped }} stopped</span>
 		</div>
 		<p v-if="$store.state.appList && running.length" class="ao-sub ao-one-line mt-2">
-			{{ running.slice(0, 4).map(app => app.name).join(' · ') }}<template v-if="running.length > 4"> · +{{ running.length - 4 }}</template>
+			{{ running.slice(0, 4).map(app => ice_i18n(app.title) || app.name).join(' · ') }}<template v-if="running.length > 4"> · +{{ running.length - 4 }}</template>
 		</p>
 	</section>
 </template>

@@ -284,7 +284,8 @@ export default {
 
 				const sortedList = sortedAppList.map(obj => obj.name)
 				this.appList = sortedAppList
-				this.$store.commit('SET_APP_LIST', sortedAppList)
+				// Legacy (v1/container) apps are containers too: the containers card and palette need them
+				this.$store.commit('SET_APP_LIST', sortedAppList.concat(orgOldAppList))
 				if (!isEqual(lateSortList, sortedList)) {
 					this.saveSortData()
 				}

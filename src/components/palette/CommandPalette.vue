@@ -1,5 +1,6 @@
 <script>
 import { fuzzyFilter } from '@/utils/fuzzy'
+import { ice_i18n } from '@/mixins/base/common-i18n'
 import { currentTheme, setTheme, themes } from '@/utils/theme'
 
 // Actions are sent over $EventBus; the components that already own each flow
@@ -23,7 +24,7 @@ export default {
 			const apps = (this.$store.state.appList || [])
 				.filter(app => app.app_type !== 'system')
 				.map(app => ({
-					id: `app-${app.name}`, group: 'apps', label: `open ${app.name}`,
+					id: `app-${app.name}`, group: 'apps', label: `open ${(ice_i18n(app.title) || app.name).toLowerCase()}`,
 					hint: app.status === 'running' ? '● running' : app.status === 'stopped' ? '✕ stopped' : `▲ ${app.status || 'unknown'}`,
 					hintClass: app.status === 'running' ? 'ao-ok' : app.status === 'stopped' ? 'ao-err' : 'ao-warn', run: () => this.$EventBus.$emit('casaUI:paletteOpenApp', app.name),
 				}))
