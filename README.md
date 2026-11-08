@@ -6,7 +6,7 @@ It replaces only the web UI. The CasaOS backend, its APIs, Docker and your apps 
 ![Dashboard](docs/screenshots/dashboard.jpg)
 
 > **Status: early, single-maintainer project.** It has been run against one real CasaOS **v0.4.15** server through the
-> dev proxy, and against the bundled mock. It has **not yet been deployed onto a server**, so expect rough edges there.
+> dev proxy, and against the bundled mock. It is deployed and running on that server; installing apps there is not yet tested.
 > See [What is and isn't tested](#what-is-and-isnt-tested).
 
 w1tOS UI is an independent fork of [IceWhaleTech/CasaOS-UI](https://github.com/IceWhaleTech/CasaOS-UI) (Apache-2.0).
@@ -67,10 +67,11 @@ your server already runs CasaOS on. Only English is shipped.
 | Theme switching (all three themes: dashboard, Files, App Store, palette) | ✅ tested against the mock |
 | On a real CasaOS v0.4.15 server: first-run account setup, login, live CPU / memory / network (Socket.IO), storage, containers card (including legacy apps), app settings, terminal, logs, Files, App Store catalogue | ✅ tested through `pnpm dev` |
 | Installing or uninstalling an app on a real server | ⚠️ not tested yet |
-| Signing in through Cloudflare Access, the deploy script, the server swap script | ⚠️ written, not yet run |
+| `deploy.ps1` and `w1tos-swap` (deploy, with the stock UI kept for rollback) | ✅ run against the real server |
+| Signing in through Cloudflare Access; `w1tos-swap rollback` / `stock` | ⚠️ written, not yet run |
 
 Known gaps and next steps, in order:
-1. Deploy onto the server with the deploy and swap scripts, then test an app install there.
+1. Test an app install, and the rollback, on the deployed server.
 2. Favicons and home-screen icons are still the stock images.
 3. The palette has no "logs / terminal for an app" action yet.
 4. `color-mix()` needs a 2023-or-newer browser.
